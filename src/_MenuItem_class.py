@@ -9,9 +9,9 @@ class MenuItem:
     def __init__(self, key="", text="", key_length=0):
         self.__key = ""
         self.__text = ""
-        self.__key_length = len(key)
+        self.__key_length = len(str(key))
         self.set_key(key)
-        self.set_key_length(len(key))
+        self.set_key_length(len(str(key)))
         self.set_text(text)
 
     # Accesseurs
@@ -27,7 +27,7 @@ class MenuItem:
     # Mutateurs
     def set_key(self, key):
         self.__key = key
-        self.__key_length = len(key)
+        self.__key_length = len(str(key))
 
     def set_text(self, text):
         self.__text = text
@@ -39,7 +39,11 @@ class MenuItem:
 
     # Methodes publiques
     def print(self):
-        print_fmt(self.__key.rjust(self.__key_length) + " : " + self.__text + " l=" + str(self.__key_length), "MENU", 2)
+        if type(self.__key) is int:
+            print_fmt(str(self.__key).rjust(self.__key_length) + " : " + self.__text + " l=" + str(self.__key_length), "MENU", 2)
+        else:
+            print_fmt(str(self.__key).ljust(self.__key_length) + " : " + self.__text + " l=" + str(self.__key_length), "MENU", 2)
+
 
 #
 # =================================================================================================
