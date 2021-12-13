@@ -6,13 +6,17 @@ import _Command_class
 # Definition de la classe MenuItem
 
 class MenuItem:
-    def __init__(self, key="", text="", key_length=0):
+    def __init__(self, key="", text="", text_format="MENU"):
+
         self.__key = ""
         self.__text = ""
+        self.__format = ""
+
         self.__key_length = len(str(key))
         self.set_key(key)
-        self.set_key_length(len(str(key)))
         self.set_text(text)
+        self.set_format(text_format)
+        self.set_key_length(len(str(key)))
 
     # Accesseurs
     def get_key(self):
@@ -20,6 +24,9 @@ class MenuItem:
 
     def get_text(self):
         return self.__text
+
+    def get_format(self):
+        return self.__format
 
     def get_key_length(self):
         return self.__key_length
@@ -32,6 +39,9 @@ class MenuItem:
     def set_text(self, text):
         self.__text = text
 
+    def set_format(self, text_format):
+        self.__format = text_format
+
     def set_key_length(self, length):
         self.__key_length = length
 
@@ -40,9 +50,9 @@ class MenuItem:
     # Methodes publiques
     def print(self):
         if type(self.__key) is int:
-            print_fmt(str(self.__key).rjust(self.__key_length) + " : " + self.__text + " l=" + str(self.__key_length), "MENU", 2)
+            print_fmt(str(self.__key).rjust(self.__key_length) + " : " + self.__text, self.__format, 2)
         else:
-            print_fmt(str(self.__key).ljust(self.__key_length) + " : " + self.__text + " l=" + str(self.__key_length), "MENU", 2)
+            print_fmt(str(self.__key).ljust(self.__key_length) + " : " + self.__text, self.__format, 2)
 
 
 #

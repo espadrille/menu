@@ -1,0 +1,100 @@
+{
+	"menu": {
+		"id"          : "global",
+		"title"       : "Menu DevOps",
+		"description" : [
+            "Outils de gestion pour l'infrastructure as a code"
+            ],
+		"format"      : "TITRE1",
+		"items"       : [
+      {
+        "id"		: 1,
+        "text"      : "Menu Git...",
+        "format"    : "MENU",
+        "commands"  : [
+          {
+            "order"      : 1,
+            "command"    : "menu.sh -m git",
+            "wait_after" : "false"
+            }
+          ]
+        },
+      {
+        "id"		: 2,
+        "text"      : "Menu Terraform...",
+        "format"    : "MENU",
+        "commands"  : [
+          {
+            "order"      : 1,
+            "command"    : "menu.sh -m terraform",
+            "wait_after" : "false"
+            }
+          ],
+        "security": {
+          "authorized_groups"  : ["terraform"]
+          }
+        },
+      {
+        "id"		: 3,
+        "text"      : "Menu AWS...",
+        "format"    : "MENU",
+        "commands"  : [
+          {
+            "order"      : 1,
+            "command"    : "menu.sh -m aws",
+            "wait_after" : "false"
+            }
+          ],
+        "security": {
+          "authorized_groups"  : ["terraform_aws"]
+          }
+        },
+      {
+        "id"		: 90,
+        "text"      : "Changer d'environnement AWS (compte AWS)",
+        "format"    : "MENU",
+        "commands"  : [
+          {
+            "order"      : 1,
+            "command"    : "scripts/change_environment.sh",
+            "wait_after" : "true"
+            }
+          ],
+        "security": {
+          "authorized_groups"  : ["terraform"]
+          }
+        },
+      {
+        "id"		: 91,
+        "text"      : "Changer de version de sources (branche ou tag)",
+        "format"    : "MENU",
+        "commands"  : [
+          {
+            "order"    : 1,
+            "command"  : "scripts/git_checkout_tag.sh"
+            },
+          {
+            "order"    : 2,
+            "command"  : "scripts/git_pull.sh",
+            "wait_after" : "true"
+            }
+          ]
+        },
+      {
+        "id"		: 99,
+        "text"      : "Parametrage / Initialisations...",
+        "format"    : "MENU",
+        "commands"  : [
+          {
+            "order"      : 1,
+            "command"    : "menu.sh -m parametrage",
+            "wait_after" : "false"
+            }
+          ],
+        "security": {
+          "authorized_groups"  : ["terraform"]
+          }
+        }
+      ]
+		}
+	}
