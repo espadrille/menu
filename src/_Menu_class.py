@@ -1,10 +1,8 @@
 # Import des modules
 import collections
-import json
 import mimetypes
 
 from module_globals import *
-import _Command_class
 from _MenuItem_class import MenuItem
 
 
@@ -18,7 +16,7 @@ class Menu:
         self.__format = ""
         self.__items = {}
 
-        self.__menu = []
+        self.__menu = dict()
         self.__json_string = ""
         self.__menu_file = ""
         self.__menu_file_mime_type = ""
@@ -89,8 +87,10 @@ class Menu:
             print_fmt("Format json incorrect dans le fichier [" + self.__menu_file + "]", "ERROR")
             print_fmt(e.__str__(), "ERROR")
 
-    def print(self, ordered=False):
+    def print_title(self):
         print_fmt(self.__title, self.__format)
+
+    def print_items(self, ordered=False):
         if ordered:
             if self.__int_sortable:
                 for my_key, my_item in collections.OrderedDict(
@@ -119,6 +119,7 @@ if __name__ == "__main__":
     my_menu = Menu()
     my_menu.load_file("../json/menu.json")
 
-    my_menu.print(ordered=True)
+    my_menu.print_title()
+    my_menu.print_items(ordered=True)
 
     my_menu.debug()
