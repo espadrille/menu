@@ -14,13 +14,16 @@ class Menu:
         self.__title = ""
         self.__description = ""
         self.__format = ""
-        self.__items = {}
+        self.__items = {}         # Collection des items originaux (lus dans le json)
+        self.__s_items = {}       # Collection des items avec la clé convertie en chaîne
 
         self.__menu = dict()
         self.__json_string = ""
         self.__menu_file = ""
         self.__menu_file_mime_type = ""
 
+        self.__ordered = False
+        self.__last_choice = ""
         self.__last_return_code = 0
         self.__key_length_max = 0
         self.__int_sortable = True
@@ -32,8 +35,10 @@ class Menu:
         return self.__menu_file
 
     # Mutateurs
+    def sort(self):
+        self.__ordered = True
 
-    # Methodes privees
+    # Méthodes privées
     def __update(self):
         if "id" in self.__menu["menu"]:
             self.__id = self.__menu["menu"]["id"]
@@ -50,11 +55,14 @@ class Menu:
                 new_item.set_text(my_item["text"])
                 if "format" in my_item:
                     new_item.set_format(my_item["format"])
+                if "commands" in my_item:
+                    new_item.set_commands(my_item["commands"])
                 self.add_item(new_item)
 
-    # Methodes publiques
+    # Méthodes publiques
     def add_item(self, item):
         self.__items[item.get_key()] = item
+        self.__s_items[str(item.get_key())] = item
         if item.get_key_length() > self.__key_length_max:
             self.__key_length_max = item.get_key_length()
 
@@ -90,8 +98,13 @@ class Menu:
     def print_title(self):
         print_fmt(self.__title, self.__format)
 
-    def print_items(self, ordered=False):
-        if ordered:
+    def print_description(self):
+        for my_line in self.__description:
+            print_fmt(my_line, "MENU", 2)
+        print_fmt("", "MENU")
+
+    def print_items(self):
+        if self.__ordered:
             if self.__int_sortable:
                 for my_key, my_item in collections.OrderedDict(
                         sorted(self.__items.items(), key=lambda t: t[0])).items():
@@ -103,12 +116,42 @@ class Menu:
         else:
             for my_key, my_item in self.__items.items():
                 my_item.print()
+
+    def read_choice(self):
+        # Transformer les clés en format chaîne avant rechercher la réponse utilisateur dans la liste
+        str_keys = [str(key) for key in self.__items.keys()]
+        if self.__ordered:
+            str_keys.sort()
+        self.__last_choice = read_fmt("Votre choix parmi " + str(str_keys))
+        while not (str(self.__last_choice) in str_keys or str(self.__last_choice) == ""):
+            print_fmt("Choisissez parmi les valeurs proposées " + str(str_keys), "ERROR")
+            self.__last_choice = read_fmt("Votre choix parmi " + str(str_keys))
+
+    def print_menu(self):
+        self.print_title()
+        self.print_description()
+        self.print_items()
+
+    def execute(self):
+        self.print_menu()
+        self.read_choice()
+        if self.__last_choice == "":
+            print_fmt("=> Abandon...", "MENU")
+        else:
+            for my_command in self.__s_items[self.__last_choice].get_commands():
+                print_fmt(my_command["command"], "MENU")
         return self.__last_return_code
 
     def debug(self):
-        print("                === Debug infos ===")
-        print("Fichier de configuration : " + self.__menu_file)
-        print("id                       : " + self.__id)
+        print("")
+        print("            === Debug infos ===")
+        print("menu_file            : " + self.__menu_file)
+        print("menu_file_mime_type  : " + self.__menu_file_mime_type)
+        print("id                   : " + self.__id)
+        print("nb_items             : " + str(len(self.__items)))
+        print("last_choice          : " + self.__last_choice)
+        print("sorted               : " + str(self.__ordered))
+        print("")
 
 
 #
@@ -119,7 +162,7 @@ if __name__ == "__main__":
     my_menu = Menu()
     my_menu.load_file("../json/menu.json")
 
-    my_menu.print_title()
-    my_menu.print_items(ordered=True)
+    my_menu.sort()
+    my_menu.execute()
 
     my_menu.debug()

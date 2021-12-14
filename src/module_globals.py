@@ -307,10 +307,10 @@ def read_fmt(question, default="", format="CYAN", indent=0, newline=False):
         question = question + " [" + default + "]"
     question = question + " :"
     print_fmt(text=question, format=format, indent=indent, newline=newline)
-    reponse = input()
-    if reponse == "":
-        reponse = default
-    return reponse
+    response = input()
+    if response == "":
+        response = default
+    return response
 
 
 def read_choice_fmt(title="", choices=[], question="", format="CYAN", indent=0):

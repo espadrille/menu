@@ -6,16 +6,20 @@ import _Command_class
 # Definition de la classe MenuItem
 
 class MenuItem:
-    def __init__(self, key="", text="", text_format="MENU"):
+    def __init__(self, key="", text="", text_format="MENU", commands=None):
 
+        if commands is None:
+            commands = []
         self.__key = ""
         self.__text = ""
         self.__format = ""
+        self.__commands = []
+        self.__key_length = 0
 
-        self.__key_length = len(str(key))
         self.set_key(key)
         self.set_text(text)
         self.set_format(text_format)
+        self.set_commands(commands)
         self.set_key_length(len(str(key)))
 
     # Accesseurs
@@ -31,6 +35,9 @@ class MenuItem:
     def get_key_length(self):
         return self.__key_length
 
+    def get_commands(self):
+        return self.__commands
+
     # Mutateurs
     def set_key(self, key):
         self.__key = key
@@ -44,6 +51,9 @@ class MenuItem:
 
     def set_key_length(self, length):
         self.__key_length = length
+
+    def set_commands(self, commands):
+        self.__commands = commands
 
     # Methodes privees
 
@@ -60,6 +70,6 @@ class MenuItem:
 # Test du module
 #
 if __name__ == "__main__":
-    my_item = MenuItem("1", "Premier choix", 5)
+    my_item = MenuItem("1", "Premier choix")
     my_item.set_key_length(10)
     my_item.print()

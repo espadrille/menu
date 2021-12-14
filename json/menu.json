@@ -1,12 +1,12 @@
 {
-	"menu": {
-		"id"          : "global",
-		"title"       : "Menu DevOps",
-		"description" : [
-            "Outils de gestion pour l'infrastructure as a code"
-            ],
-		"format"      : "TITRE1",
-		"items"       : [
+  "menu": {
+    "id"          : "global",
+    "title"       : "Menu DevOps",
+    "description" : [
+      "Outils de gestion pour l'infrastructure as a code"
+      ],
+    "format"      : "TITRE1",
+    "items"       : [
       {
         "id"		: 1,
         "text"      : "Menu Git...",
@@ -18,21 +18,6 @@
             "wait_after" : "false"
             }
           ]
-        },
-      {
-        "id"		: 2,
-        "text"      : "Menu Terraform...",
-        "format"    : "MENU",
-        "commands"  : [
-          {
-            "order"      : 1,
-            "command"    : "menu.sh -m terraform",
-            "wait_after" : "false"
-            }
-          ],
-        "security": {
-          "authorized_groups"  : ["terraform"]
-          }
         },
       {
         "id"		: 3,
@@ -50,7 +35,22 @@
           }
         },
       {
-        "id"		: 90,
+        "id"		: 2,
+        "text"      : "Menu Terraform...",
+        "format"    : "MENU",
+        "commands"  : [
+          {
+            "order"      : 1,
+            "command"    : "menu.sh -m terraform",
+            "wait_after" : "false"
+            }
+          ],
+        "security": {
+          "authorized_groups"  : ["terraform"]
+          }
+        },
+      {
+        "id"		: "a1",
         "text"      : "Changer d'environnement AWS (compte AWS)",
         "format"    : "MENU",
         "commands"  : [
@@ -65,7 +65,7 @@
           }
         },
       {
-        "id"		: 91,
+        "id"		: "a2",
         "text"      : "Changer de version de sources (branche ou tag)",
         "format"    : "MENU",
         "commands"  : [
@@ -81,7 +81,7 @@
           ]
         },
       {
-        "id"		: 99,
+        "id"		: "a3",
         "text"      : "Parametrage / Initialisations...",
         "format"    : "MENU",
         "commands"  : [
@@ -96,5 +96,5 @@
           }
         }
       ]
-		}
-	}
+    }
+  }
