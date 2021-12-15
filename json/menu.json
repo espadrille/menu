@@ -15,7 +15,7 @@
           {
             "order"      : 1,
             "command"    : "menu.sh -m git",
-            "wait_after" : "false"
+            "wait_after" : "False"
             }
           ]
         },
@@ -27,7 +27,7 @@
           {
             "order"      : 1,
             "command"    : "menu.sh -m aws",
-            "wait_after" : "false"
+            "wait_after" : "False"
             }
           ],
         "security": {
@@ -65,30 +65,30 @@
           }
         },
       {
-        "id"		: "a2",
-        "text"      : "Changer de version de sources (branche ou tag)",
-        "format"    : "MENU",
-        "commands"  : [
+        "id": "a2",
+        "text": "Changer de version de sources (branche ou tag)",
+        "format": "MENU",
+        "commands": [
           {
-            "order"    : 1,
-            "command"  : "scripts/git_checkout_tag.sh"
-            },
+            "order": 1,
+            "command": "scripts/git_checkout_tag.sh"
+          },
           {
-            "order"    : 2,
-            "command"  : "scripts/git_pull.sh",
-            "wait_after" : "true"
-            }
-          ]
-        },
+            "order": 2,
+            "command": "scripts/git_pull.sh",
+            "wait_after": "True"
+          }
+        ]
+      },
       {
         "id"		: "a3",
-        "text"      : "Parametrage / Initialisations...",
+        "text"      : "Paramétrage / Initialisations...",
         "format"    : "MENU",
         "commands"  : [
           {
             "order"      : 1,
-            "command"    : "menu.sh -m parametrage",
-            "wait_after" : "false"
+            "command"    : "menu.sh -m paramétrage",
+            "wait_after" : "False"
             }
           ],
         "security": {
