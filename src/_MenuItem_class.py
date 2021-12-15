@@ -1,6 +1,8 @@
 # Import des modules
 from module_globals import *
 import _Command_class
+import collections
+from _Command_class import Command
 
 
 # Definition de la classe MenuItem
@@ -9,12 +11,13 @@ class MenuItem:
     def __init__(self, key="", text="", text_format="MENU", commands=None):
 
         if commands is None:
-            commands = []
+            commands = {}
         self.__key = ""
         self.__text = ""
         self.__format = ""
-        self.__commands = []
+        self.__commands = {}
         self.__key_length = 0
+        self.__last_return_code = 0
 
         self.set_key(key)
         self.set_text(text)
@@ -35,8 +38,11 @@ class MenuItem:
     def get_key_length(self):
         return self.__key_length
 
+    def get_command(self, command_id=0):
+        return self.__commands[command_id]
+
     def get_commands(self):
-        return self.__commands
+        return self.__commands.items()
 
     # Mutateurs
     def set_key(self, key):
@@ -55,9 +61,25 @@ class MenuItem:
     def set_commands(self, commands):
         self.__commands = commands
 
-    # Methodes privees
+    # Méthodes privées
 
-    # Methodes publiques
+    # Méthodes publiques
+    def add_command(self, command):
+        new_command = Command()
+        if "order" in command:
+            new_command.set_order(command["order"])
+        if "command" in command:
+            new_command.set_command_line(command["command"])
+        if "wait_after" in command:
+            new_command.set_wait_after(command["wait_after"])
+        self.__commands[new_command.get_order()] = new_command
+
+    def execute_commands(self):
+        for my_key, my_command in collections.OrderedDict(sorted(self.__commands.items(),
+                                                                 key=lambda t: t[1].get_order())).items():
+            self.__last_return_code = my_command.execute()
+        return self.__last_return_code
+
     def print(self):
         if type(self.__key) is int:
             print_fmt(str(self.__key).rjust(self.__key_length) + " : " + self.__text, self.__format, 2)

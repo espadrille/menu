@@ -14,11 +14,10 @@ class Menu:
         self.__title = ""
         self.__description = ""
         self.__format = ""
-        self.__items = {}         # Collection des items originaux (lus dans le json)
-        self.__s_items = {}       # Collection des items avec la clé convertie en chaîne
+        self.__items = dict()         # Collection des items originaux (lus dans le json)
+        self.__s_items = dict()       # Collection des items avec la clé convertie en chaîne
 
         self.__menu = dict()
-        self.__json_string = ""
         self.__menu_file = ""
         self.__menu_file_mime_type = ""
 
@@ -40,24 +39,26 @@ class Menu:
 
     # Méthodes privées
     def __update(self):
-        if "id" in self.__menu["menu"]:
-            self.__id = self.__menu["menu"]["id"]
-        if "title" in self.__menu["menu"]:
-            self.__title = self.__menu["menu"]["title"]
-        if "description" in self.__menu["menu"]:
-            self.__description = self.__menu["menu"]["description"]
-        if "format" in self.__menu["menu"]:
-            self.__format = self.__menu["menu"]["format"]
-        if "items" in self.__menu["menu"]:
-            for my_item in self.__menu["menu"]["items"]:
-                new_item = MenuItem()
-                new_item.set_key(my_item["id"])
-                new_item.set_text(my_item["text"])
-                if "format" in my_item:
-                    new_item.set_format(my_item["format"])
-                if "commands" in my_item:
-                    new_item.set_commands(my_item["commands"])
-                self.add_item(new_item)
+        if "menu" in self.__menu:
+            if "id" in self.__menu["menu"]:
+                self.__id = self.__menu["menu"]["id"]
+            if "title" in self.__menu["menu"]:
+                self.__title = self.__menu["menu"]["title"]
+            if "description" in self.__menu["menu"]:
+                self.__description = self.__menu["menu"]["description"]
+            if "format" in self.__menu["menu"]:
+                self.__format = self.__menu["menu"]["format"]
+            if "items" in self.__menu["menu"]:
+                for my_item in self.__menu["menu"]["items"]:
+                    new_item = MenuItem()
+                    new_item.set_key(my_item["id"])
+                    new_item.set_text(my_item["text"])
+                    if "format" in my_item:
+                        new_item.set_format(my_item["format"])
+                    if "commands" in my_item:
+                        for my_command in my_item["commands"]:
+                            new_item.add_command(my_command)
+                    self.add_item(new_item)
 
     # Méthodes publiques
     def add_item(self, item):
@@ -90,7 +91,6 @@ class Menu:
     def load_json(self, json_string):
         try:
             self.__menu = json.loads(json_string)
-            self.__json_string = json_string
         except Exception as e:
             print_fmt("Format json incorrect dans le fichier [" + self.__menu_file + "]", "ERROR")
             print_fmt(e.__str__(), "ERROR")
@@ -138,8 +138,7 @@ class Menu:
         if self.__last_choice == "":
             print_fmt("=> Abandon...", "MENU")
         else:
-            for my_command in self.__s_items[self.__last_choice].get_commands():
-                print_fmt(my_command["command"], "MENU")
+            self.__last_return_code = self.__s_items[self.__last_choice].execute_commands()
         return self.__last_return_code
 
     def debug(self):
@@ -151,6 +150,7 @@ class Menu:
         print("nb_items             : " + str(len(self.__items)))
         print("last_choice          : " + self.__last_choice)
         print("sorted               : " + str(self.__ordered))
+        print("last_return_code     : " + str(self.__last_return_code))
         print("")
 
 
