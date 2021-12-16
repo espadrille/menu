@@ -1,5 +1,6 @@
 # Import des modules
 from module_globals import *
+import readchar
 
 
 # Definition de la classe Command
@@ -49,6 +50,9 @@ class Command:
                       indent=4
                       )
             self.__last_return_code = os.system(self.__command_line)
+        if self.__wait_after:
+            print_fmt("Appuyez sur une touche pour continuer...", "CYAN")
+            readchar.readchar()
         return self.__last_return_code
 
     def print_command_line(self):
