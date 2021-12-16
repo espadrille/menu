@@ -6,8 +6,10 @@ import sys
 
 from _Menu_class import Menu
 
-my_menu = Menu()
-my_menu.load_file(os.path.dirname(sys.argv[0]) + "/../json/menu.json")
+# Construction du menu
+my_menu = Menu(menu_file=os.path.dirname(sys.argv[0]) + "/../json/menu.json",
+               sort_items=True
+               )
 
-my_menu.sort()
+# Execution du menu
 my_menu.execute()

@@ -31,7 +31,8 @@
             }
           ],
         "security": {
-          "authorized_groups"  : ["terraform_aws"]
+          "authorized_groups"  : ["terraform_aws"],
+          "authorized_users"   : ["herve"]
           }
         },
       {
@@ -46,8 +47,9 @@
             }
           ],
         "security": {
-          "authorized_groups"  : ["terraform"]
-          }
+          "authorized_groups"  : ["terraform"],
+          "authorized_users"   : ["herve"]
+         }
         },
       {
         "id"		: "a1",

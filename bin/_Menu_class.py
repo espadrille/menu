@@ -10,23 +10,24 @@ from _MenuItem_class import MenuItem
 # Definition de la classe Menu
 
 class Menu:
-    def __init__(self, menu_file=""):
-        self.__id = ""
-        self.__title = ""
-        self.__description = ""
-        self.__format = ""
-        self.__items = dict()         # Collection des items originaux (lus dans le json)
-        self.__s_items = dict()       # Collection des items avec les clés converties en chaîne
+    def __init__(self, menu_file="", sort_items=False):
+        self.__id = ""  # Identifiant du menu
+        self.__title = ""  # Titre du menu
+        self.__description = ""  # Description du menu
+        self.__format = ""  # Format d'affichage du menu
+        self.__items = dict()  # Collection des items originaux (lus dans le json)
+        self.__s_items = dict()  # Collection des items avec les clés converties en chaîne
 
-        self.__menu = dict()
-        self.__menu_file = ""
-        self.__menu_file_mime_type = ""
+        self.__menu = dict()  # Contenu de l'objet menu
+        self.__menu_file = ""  # Chemin d'accès au fichier de menu
+        self.__menu_file_mime_type = ""  # Type mime du fichier de menu (actuellement, seul 'application.json' est
+        # supporté
 
-        self.__ordered = False
-        self.__last_choice = ""
-        self.__last_return_code = 0
-        self.__key_length_max = 0
-        self.__int_sortable = True
+        self.__sorted = sort_items  # Indique s'il faut trier les items de menu par le champ 'id'
+        self.__last_choice = ""  # Clé de l'item choisi par l'utilisateur
+        self.__last_return_code = 0  # Code retour de la dernière commande exécutée
+        self.__key_length_max = 0  # Longueur de la plus longue clé (sert pour justifier l'affichage)
+        self.__int_sortable = True  # Indique si le tri peut être numérique (sinon, il sera alphabétique)
         if menu_file != "":
             self.load_file(menu_file)
 
@@ -36,7 +37,7 @@ class Menu:
 
     # Mutateurs
     def sort(self):
-        self.__ordered = True
+        self.__sorted = True
 
     # Méthodes privées
     def __update(self):
@@ -117,7 +118,7 @@ class Menu:
         print_fmt("", "MENU")
 
     def print_items(self):
-        if self.__ordered:
+        if self.__sorted:
             if self.__int_sortable:
                 for my_key, my_item in collections.OrderedDict(
                         sorted(self.__items.items(), key=lambda t: t[0])).items():
@@ -133,7 +134,7 @@ class Menu:
     def read_choice(self):
         # Transformer les clés en format chaîne avant rechercher la réponse utilisateur dans la liste
         str_keys = [str(key) for key in self.__items.keys()]
-        if self.__ordered:
+        if self.__sorted:
             str_keys.sort()
         self.__last_choice = read_fmt("Votre choix parmi " + str(str_keys))
         while not (str(self.__last_choice) in str_keys or str(self.__last_choice) == ""):
@@ -162,7 +163,7 @@ class Menu:
         print("id                   : " + self.__id)
         print("nb_items             : " + str(len(self.__items)))
         print("last_choice          : " + self.__last_choice)
-        print("sorted               : " + str(self.__ordered))
+        print("sorted               : " + str(self.__sorted))
         print("last_return_code     : " + str(self.__last_return_code))
         print("")
 
