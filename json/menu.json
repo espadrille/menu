@@ -61,7 +61,7 @@
             }
           ],
         "security": {
-          "authorized_groups"  : ["terraform"]
+          "authorized_groups"  : ["terraform", "sambashare"]
           }
         },
       {

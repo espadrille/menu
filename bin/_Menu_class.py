@@ -16,7 +16,7 @@ class Menu:
         self.__description = ""
         self.__format = ""
         self.__items = dict()         # Collection des items originaux (lus dans le json)
-        self.__s_items = dict()       # Collection des items avec la clé convertie en chaîne
+        self.__s_items = dict()       # Collection des items avec les clés converties en chaîne
 
         self.__menu = dict()
         self.__menu_file = ""
