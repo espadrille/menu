@@ -1,6 +1,7 @@
 # Import des modules
 import collections
 import mimetypes
+import grp
 
 from module_globals import *
 from _MenuItem_class import MenuItem
@@ -39,6 +40,7 @@ class Menu:
 
     # Méthodes privées
     def __update(self):
+        self.__items.clear()
         if "menu" in self.__menu:
             if "id" in self.__menu["menu"]:
                 self.__id = self.__menu["menu"]["id"]
@@ -50,15 +52,26 @@ class Menu:
                 self.__format = self.__menu["menu"]["format"]
             if "items" in self.__menu["menu"]:
                 for my_item in self.__menu["menu"]["items"]:
-                    new_item = MenuItem()
-                    new_item.set_key(my_item["id"])
-                    new_item.set_text(my_item["text"])
-                    if "format" in my_item:
-                        new_item.set_format(my_item["format"])
-                    if "commands" in my_item:
-                        for my_command in my_item["commands"]:
-                            new_item.add_command(my_command)
-                    self.add_item(new_item)
+                    authorized = True
+                    if "security" in my_item:
+                        authorized = False
+                        if "authorized_groups" in my_item["security"]:
+                            for authorized_group in my_item["security"]["authorized_groups"]:
+                                if authorized_group in [grp.getgrgid(g).gr_name for g in os.getgroups()]:
+                                    authorized = True
+                        if "authorized_users" in my_item["security"]:
+                            if os.getlogin() in my_item["security"]["authorized_users"]:
+                                authorized = True
+                    if authorized:
+                        new_item = MenuItem()
+                        new_item.set_key(my_item["id"])
+                        new_item.set_text(my_item["text"])
+                        if "format" in my_item:
+                            new_item.set_format(my_item["format"])
+                        if "commands" in my_item:
+                            for my_command in my_item["commands"]:
+                                new_item.add_command(my_command)
+                        self.add_item(new_item)
 
     # Méthodes publiques
     def add_item(self, item):
