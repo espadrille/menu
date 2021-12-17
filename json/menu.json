@@ -14,11 +14,11 @@
         "commands"  : [
           {
             "order"      : 1,
-            "command"    : "menu.sh -m git",
-            "wait_after" : "False"
-            }
-          ]
-        },
+            "command"    : "menu.sh -m git"
+          }
+        ],
+        "wait_after" : "False"
+      },
       {
         "id"		: 3,
         "text"      : "Menu AWS...",
@@ -26,8 +26,7 @@
         "commands"  : [
           {
             "order"      : 1,
-            "command"    : "menu.sh -m aws",
-            "wait_after" : "False"
+            "command"    : "menu.sh -m aws"
             }
           ],
         "security": {
@@ -58,8 +57,7 @@
         "commands"  : [
           {
             "order"      : 1,
-            "command"    : "scripts/change_environment.sh",
-            "wait_after" : "true"
+            "command"    : "scripts/change_environment.sh"
             }
           ],
         "security": {
@@ -77,8 +75,7 @@
           },
           {
             "order": 2,
-            "command": "scripts/git_pull.sh",
-            "wait_after": "True"
+            "command": "scripts/git_pull.sh"
           }
         ]
       },

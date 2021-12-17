@@ -20,6 +20,7 @@ class Menu:
 
         self.__menu = dict()  # Contenu de l'objet menu
         self.__menu_file = ""  # Chemin d'accès au fichier de menu
+        self.__menu_loaded = False  # Indique si un menu a été chargé
         self.__menu_file_mime_type = ""  # Type mime du fichier de menu (actuellement, seul 'application.json' est
         # supporté
 
@@ -65,13 +66,17 @@ class Menu:
                                 authorized = True
                     if authorized:
                         new_item = MenuItem()
-                        new_item.set_key(my_item["id"])
-                        new_item.set_text(my_item["text"])
+                        if "id" in my_item:
+                            new_item.set_key(my_item["id"])
+                        if "text" in my_item:
+                            new_item.set_text(my_item["text"])
                         if "format" in my_item:
-                            new_item.set_format(my_item["format"])
+                            new_item.set_text_format(my_item["format"])
                         if "commands" in my_item:
                             for my_command in my_item["commands"]:
                                 new_item.add_command(my_command)
+                        if "wait_after" in my_item:
+                            new_item.set_wait_after(my_item["wait_after"])
                         self.add_item(new_item)
 
     # Méthodes publiques
@@ -104,7 +109,9 @@ class Menu:
 
     def load_json(self, json_string):
         try:
+            self.__menu_loaded = False
             self.__menu = json.loads(json_string)
+            self.__menu_loaded = True
         except Exception as e:
             print_fmt("Format json incorrect dans le fichier [" + self.__menu_file + "]", "ERROR")
             print_fmt(e.__str__(), "ERROR")
@@ -142,18 +149,26 @@ class Menu:
             self.__last_choice = read_fmt("Votre choix parmi " + str(str_keys))
 
     def print_menu(self):
+        clear_screen()
         self.print_title()
         self.print_description()
         self.print_items()
 
     def execute(self):
-        self.print_menu()
-        self.read_choice()
-        if self.__last_choice == "":
-            print_fmt("=> Abandon...", "MENU")
+        if self.__menu_loaded:
+            exit_menu = False
+            while not exit_menu:
+                self.print_menu()
+                self.read_choice()
+                if self.__last_choice == "":
+                    print_fmt("=> Abandon...", "MENU")
+                    exit_menu = True
+                else:
+                    self.__last_return_code = self.__s_items[self.__last_choice].execute_commands()
+
+            return self.__last_return_code
         else:
-            self.__last_return_code = self.__s_items[self.__last_choice].execute_commands()
-        return self.__last_return_code
+            print_fmt("Aucun menu à afficher", "ERROR")
 
     def debug(self):
         print("")

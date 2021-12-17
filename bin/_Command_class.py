@@ -9,8 +9,10 @@ class Command:
     def __init__(self, order=0, command_line="", wait_after=False):
         self.__order = order
         self.__command_line = command_line
-        self.__wait_after = wait_after
+        self.__wait_after = False
         self.__last_return_code = 0
+
+        self.set_wait_after(wait_after)
 
     # Accesseurs
     def get_order(self):
@@ -30,7 +32,9 @@ class Command:
         self.__command_line = str(command_line)
 
     def set_wait_after(self, wait_after):
-        self.__wait_after = wait_after
+        self.__wait_after = False
+        if wait_after == "True":
+            self.__wait_after = True
 
     # Méthodes privées
 
@@ -41,12 +45,12 @@ class Command:
         self.print_command_line()
         if what_if:
             print_fmt("*** what_if *** : la commande [" + self.__command_line + "] n'a pas été exécutée",
-                      format="YELLOW",
+                      text_format="YELLOW",
                       indent=4
                       )
         else:
             print_fmt("Execution de la commande [" + self.__command_line + "]",
-                      format="YELLOW",
+                      text_format="YELLOW",
                       indent=4
                       )
             self.__last_return_code = os.system(self.__command_line)

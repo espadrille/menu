@@ -52,6 +52,15 @@ class GlobalVars:
             self.TOOLS_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
 
+def clear_screen():
+    # It is for macOS and Linux(here, os.name is 'posix')
+    if os.name == 'posix':
+        _ = os.system('clear')
+    else:
+        # It is for Windows platfrom
+        _ = os.system('cls')
+
+
 def repeat(text, nb=2):
     #
     # Repeter un caractere (ou plusieurs...), sans retour a la ligne
@@ -66,23 +75,23 @@ def repeat(text, nb=2):
     return retour
 
 
-def print_fmt(text: object, format: object = "", indent: object = 0, newline: object = True) -> object:
+def print_fmt(text, text_format="", indent=0, newline=True):
     #
     # Propose un affichage formate.
     #
     # Il est possible de cumuler plusieurs formats. Par exemple :
-    #     print_fmt("Texte a afficher", format=["BLUE", "BOLD"], indent=4)
-    # Affiche "Texte a afficher" en bleu gras, et indente de 4 espaces
+    #     print_fmt("Texte à afficher", text_format=["BLUE", "BOLD"], indent=4)
+    # Affiche "Texte à afficher" en bleu gras, et indente de 4 espaces
     #
-    # Les valeurs de format peuvent etre les suivantes :
+    # Les valeurs de text_format peuvent être les suivantes :
     #     TITRE1, TITRE2, TITRE3 : Formats de titre
     #     OK, WARNING, ERROR : Formats standards en couleur (respectivement vert, jaune, rouge)
-    #     COMMAND : Utilise pour afficher une commande linux executee par un script (inverse video)
-    #     BOLD, RED, GREEN, YELLOW, MAUVE, CYAN, PURPLE : Affiche le texte dans la couleur demandee 
+    #     COMMAND : Utilise pour afficher une commande linux exécutée par un script (inverse video)
+    #     BOLD, RED, GREEN, YELLOW, MAUVE, CYAN, PURPLE : Affiche le texte dans la couleur demandée
     #     (ou en gras pour BOLD)
     #
-    # La valeur de indent indique le nombre d'espaces a afficher avant la chaine (pour indenter)
-    #     <valeur numerique> : Nombre d'espaces a afficher avant la chaine (pour l'indenter)
+    # La valeur de 'indent' indique le nombre d'espaces à afficher avant la chaine (pour indenter)
+    #     <valeur numérique> : Nombre d'espaces à afficher avant la chaine (pour l'indenter)
     #
 
     screen_heigth, screen_width = os.popen('stty size', 'r').read().split()
@@ -90,52 +99,52 @@ def print_fmt(text: object, format: object = "", indent: object = 0, newline: ob
     my_text = text.rstrip()
     my_color = ""
     my_indent = indent
-    if format == "TITRE1":
+    if text_format == "TITRE1":
         my_color = COLORS["BOLD"] + COLORS["MAUVE"]
         my_indent = 8
-    elif format == "TITRE2":
+    elif text_format == "TITRE2":
         my_color = COLORS["BOLD"] + COLORS["MAUVE"]
         my_indent = 4
-    elif format == "TITRE3":
+    elif text_format == "TITRE3":
         my_color = COLORS["BOLD"] + COLORS["MAUVE"]
         my_indent = 2
-    elif format == "COMMAND":
+    elif text_format == "COMMAND":
         my_color = COLORS["BLACK"] + COLORS["BK_WHITE"]
-    elif format == "MENU":
+    elif text_format == "MENU":
         my_color = COLORS["BOLD"] + COLORS["MAUVE"]
-    elif format == "OK":
+    elif text_format == "OK":
         my_color = COLORS["BOLD"] + COLORS["GREEN"]
-    elif format == "WARNING":
+    elif text_format == "WARNING":
         my_color = COLORS["BOLD"] + COLORS["YELLOW"]
-    elif format == "ERROR":
+    elif text_format == "ERROR":
         my_color = COLORS["BOLD"] + COLORS["RED"]
-    elif format == "":
+    elif text_format == "":
         my_color = ""
     else:
-        my_color = COLORS[format]
+        my_color = COLORS[text_format]
 
-    if format == "TITRE1":
+    if text_format == "TITRE1":
         print("")
         print(repeat(' ', my_indent) + my_color + repeat("=", len(my_text)) + COLORS["RESET"])
         print(repeat(' ', my_indent) + my_color + my_text + COLORS["RESET"])
         print(repeat(' ', my_indent) + my_color + repeat("=", len(my_text)) + COLORS["RESET"])
         print("", end="")
-    elif format == "TITRE2":
+    elif text_format == "TITRE2":
         print("")
         print(repeat(' ', my_indent) + my_color + my_text + COLORS["RESET"])
         print(repeat(' ', my_indent) + my_color + repeat("-", len(my_text)) + COLORS["RESET"])
         print("", end="")
-    elif format == "TITRE3":
+    elif text_format == "TITRE3":
         print("")
         print(repeat(' ', my_indent) + my_color + my_text + COLORS["RESET"])
         print("", end="")
-    elif format == "COMMAND":
+    elif text_format == "COMMAND":
         print(repeat(' ', my_indent) + my_color + my_text + COLORS["RESET"], end="")
-    elif format == "OK":
+    elif text_format == "OK":
         print(repeat(' ', my_indent) + my_color + "[OK] " + my_text + COLORS["RESET"], end="")
-    elif format == "WARNING":
+    elif text_format == "WARNING":
         print(repeat(' ', my_indent) + my_color + "[WARNING] " + my_text + COLORS["RESET"], end="")
-    elif format == "ERROR":
+    elif text_format == "ERROR":
         print(repeat(' ', my_indent) + my_color + "[ERROR] " + my_text + COLORS["RESET"], end="")
     else:
         print(repeat(' ', my_indent) + my_color + my_text + COLORS["RESET"], end="")
@@ -143,20 +152,20 @@ def print_fmt(text: object, format: object = "", indent: object = 0, newline: ob
         print("")
 
 
-def print_tab(title="", headers=[], datas=[], footer=None, format="", indent=0):
+def print_tab(title="", headers=[], datas=[], footer=None, text_format="", indent=0):
     column_separator = " | "
 
     # Calcul des longueurs de champs pour ajuster la taille des colonnes du tableau
     # Le tableau $LongueurChamps contient une valeur pour chaque colonne
     field_lengths = []
 
-    # Initialiser les largeurs de colonnes depuis en parcourant les entetes et les datas
+    # Initialiser les largeurs de colonnes en parcourant les entêtes et les datas
     i_col = 0
     for my_header in headers:
         field_lengths.append(len(my_header.split("|")[0].strip()))
         i_col = i_col + 1
     for my_data_line in datas:
-        # Pour chaque ligne de datas, ajuster les largeurs de colonnes si besoin
+        # Pour chaque ligne, ajuster les largeurs de colonnes si besoin
         i_col = 0
         if type(my_data_line) is list:
             for my_data in my_data_line:
@@ -199,13 +208,13 @@ def print_tab(title="", headers=[], datas=[], footer=None, format="", indent=0):
 
     # Titre
     if len(title) > 0:
-        print_fmt("+-" + repeat("-", line_length) + "-+", format=format, indent=indent)
+        print_fmt("+-" + repeat("-", line_length) + "-+", text_format=text_format, indent=indent)
         centered_title = ("{:^" + str(line_length) + "}").format(title)
-        print_fmt("| " + centered_title + " |", format=format, indent=indent)
+        print_fmt("| " + centered_title + " |", text_format=text_format, indent=indent)
 
     # Entetes
     if len(headers) > 0:
-        print_fmt(separator_line, format=format, indent=indent)
+        print_fmt(separator_line, text_format=text_format, indent=indent)
         header_line = ""
         i_col = 0
 
@@ -232,11 +241,11 @@ def print_tab(title="", headers=[], datas=[], footer=None, format="", indent=0):
             else:
                 header_line = header_line + ("{:<" + str(length) + "}").format(my_header)
             i_col = i_col + 1
-        print_fmt("| " + ("{:<" + str(line_length) + "}").format(header_line) + " |", format=format, indent=indent)
+        print_fmt("| " + ("{:<" + str(line_length) + "}").format(header_line) + " |", text_format=text_format, indent=indent)
 
     # datas
     if len(datas) > 0:
-        print_fmt(separator_line, format=format, indent=indent)
+        print_fmt(separator_line, text_format=text_format, indent=indent)
         for my_data_line in datas:
             data_line = ""
             i_col = 0
@@ -286,18 +295,19 @@ def print_tab(title="", headers=[], datas=[], footer=None, format="", indent=0):
                 else:
                     data_line = data_line + ("{:<" + str(length) + "}").format(my_data_line)
 
-            print_fmt("| " + ("{:<" + str(line_length) + "}").format(data_line) + " |", format=format, indent=indent)
+            print_fmt("| " + ("{:<" + str(line_length) + "}").format(data_line) + " |", text_format=text_format,
+                      indent=indent)
 
     # Pied
     if len(footer) > 0:
-        print_fmt(separator_line, format=format, indent=indent)
-        print_fmt("| " + ("{:>" + str(line_length) + "}").format(footer) + " |", format=format, indent=indent)
+        print_fmt(separator_line, text_format=text_format, indent=indent)
+        print_fmt("| " + ("{:>" + str(line_length) + "}").format(footer) + " |", text_format=text_format, indent=indent)
 
     # Fermeture du tableau
     if len(footer) > 0:
-        print_fmt("+-" + repeat("-", line_length) + "-+", format=format, indent=indent)
+        print_fmt("+-" + repeat("-", line_length) + "-+", text_format=text_format, indent=indent)
     else:
-        print_fmt(separator_line, format=format, indent=indent)
+        print_fmt(separator_line, text_format=text_format, indent=indent)
 
     print_fmt("")
 
@@ -306,25 +316,25 @@ def read_fmt(question, default="", format="CYAN", indent=0, newline=False):
     if default != "":
         question = question + " [" + default + "]"
     question = question + " :"
-    print_fmt(text=question, format=format, indent=indent, newline=newline)
+    print_fmt(text=question, text_format=format, indent=indent, newline=newline)
     response = input()
     if response == "":
         response = default
     return response
 
 
-def read_choice_fmt(title="", choices=[], question="", format="CYAN", indent=0):
+def read_choice_fmt(title="", choices=[], question="", text_format="CYAN", indent=0):
     options = ""
     if len(choices) == 1:
         # S'il n'y a qu'un choix possible, on le selectionne automatiquement
         retour = choices[0]['value']
     else:
         if title != "":
-            print_fmt(text=title, format=format, indent=indent)
+            print_fmt(text=title, text_format=text_format, indent=indent)
 
         i = 1
         for my_item in choices:
-            print_fmt(str(i) + " : " + str(my_item['text']), format, indent + 2)
+            print_fmt(str(i) + " : " + str(my_item['text']), text_format, indent + 2)
             if options == "":
                 options = str(i)
             else:
@@ -332,28 +342,29 @@ def read_choice_fmt(title="", choices=[], question="", format="CYAN", indent=0):
             i = i + 1
 
         choix_ok = False
+        response = ""
         while not choix_ok:
             if question == "":
                 question = "Faites un choix parmi (" + options + ") ou 'Entree'  pour sortir : "
 
-            reponse = read_fmt(question=question, format=format, indent=indent)
-            if reponse == "" or (reponse.isnumeric() and int(reponse) in range(1, i)):
+            response = read_fmt(question=question, format=text_format, indent=indent)
+            if response == "" or (response.isnumeric() and int(response) in range(1, i)):
                 choix_ok = True
             else:
-                print_fmt("Choisissez parmi les valeurs proposees (" + options + ")", "ERROR")
+                print_fmt("Choisissez parmi les valeurs proposées (" + options + ")", "ERROR")
 
-        if reponse == "":
+        if response == "":
             print_fmt("==> Abandon.", "BOLD")
             sys.exit(255)
         else:
-            retour = choices[int(reponse) - 1]['value']
+            retour = choices[int(response) - 1]['value']
 
     return retour
 
 
 def remove_accents(text):
     try:
-        text = unicode(text, 'utf-8')
+        text = text.encode('utf-8')
     except (TypeError, NameError):  # unicode is a default on python 3
         pass
     text = unicodedata.normalize('NFD', text)
@@ -367,19 +378,19 @@ def remove_accents(text):
 # Test du module
 #
 if __name__ == "__main__":
-    print_fmt("Ceci est un titre 1", format="TITRE1")
-    print_fmt("Ceci est un titre 2", format="TITRE2")
-    print_fmt("Ceci est un titre 3", format="TITRE3")
-    print_fmt("Format 'OK' avec indent 8", format="OK", indent=8)
-    print_fmt("Format 'WARNING' avec indent 8", format="WARNING", indent=8)
-    print_fmt("Format 'ERROR' avec indent 8", format="ERROR", indent=8)
-    print_fmt("Format 'BOLD' avec indent 4", format="BOLD", indent=4)
-    print_fmt("Format 'MENU' avec indent 4", format="MENU", indent=4)
+    print_fmt("Ceci est un titre 1", text_format="TITRE1")
+    print_fmt("Ceci est un titre 2", text_format="TITRE2")
+    print_fmt("Ceci est un titre 3", text_format="TITRE3")
+    print_fmt("Format 'OK' avec indent 8", text_format="OK", indent=8)
+    print_fmt("Format 'WARNING' avec indent 8", text_format="WARNING", indent=8)
+    print_fmt("Format 'ERROR' avec indent 8", text_format="ERROR", indent=8)
+    print_fmt("Format 'BOLD' avec indent 4", text_format="BOLD", indent=4)
+    print_fmt("Format 'MENU' avec indent 4", text_format="MENU", indent=4)
 
     my_globals = GlobalVars()
-    print_fmt("CURRENT_ENVIRONMENT=" + my_globals.CURRENT_ENVIRONMENT, format="")
-    print_fmt("CURRENT_PROJECT=" + my_globals.CURRENT_PROJECT, format="")
-    print_fmt("TOOLS_DIRECTORY=" + my_globals.TOOLS_DIRECTORY, format="")
+    print_fmt("CURRENT_ENVIRONMENT=" + my_globals.CURRENT_ENVIRONMENT, text_format="")
+    print_fmt("CURRENT_PROJECT=" + my_globals.CURRENT_PROJECT, text_format="")
+    print_fmt("TOOLS_DIRECTORY=" + my_globals.TOOLS_DIRECTORY, text_format="")
 
     # Creation d'une liste de choix
     MyList = [{
@@ -392,23 +403,23 @@ if __name__ == "__main__":
         'text': 'Mon texte 3',
         'value': 3
     }, {
-        'text': 'Le choix supplementaire',
+        'text': 'Le choix supplémentaire',
         'value': 'Vous avez choisi le dernier item'
     }]
     # Ajout d'un autre choix dans la liste
     reponse = str(read_choice_fmt(title="Voici une liste :", choices=MyList, question="Choisissez votre valeur : "))
-    print_fmt("Valeur correspondante a votre choix : " + reponse, format="GREEN")
+    print_fmt("Valeur correspondante a votre choix : " + reponse, text_format="GREEN")
 
     print_tab(title="Mon tableau de test avec un titre de tres grande largeur pour voir si tout est bien aligne",
-            headers=["col1", "colonne 2 avec un grand libelle"],
-            datas=[["essai plus long", "test|align=center"], ["essai", "test"]],
-            footer="C'est le pied !",
-            indent=4,
-            format="CYAN")
+              headers=["col1", "colonne 2 avec un grand libelle"],
+              datas=[["essai plus long", "test centré|align=center"], ["essai", "test"]],
+              footer="C'est le pied !",
+              indent=4,
+              text_format="CYAN")
 
     print_tab(title="Mon tableau a 1 dimension",
-            headers=["col1"],
-            datas=["essai plus long", "test|align=center", "essai", "test"],
-            footer="C'est le pied !",
-            indent=4,
-            format="CYAN")
+              headers=["col1"],
+              datas=["essai plus long", "test centré|align=center", "essai", "test"],
+              footer="C'est le pied !",
+              indent=4,
+              text_format="CYAN")

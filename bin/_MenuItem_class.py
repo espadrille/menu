@@ -2,13 +2,14 @@
 from module_globals import *
 import _Command_class
 import collections
+import readchar
 from _Command_class import Command
 
 
 # Definition de la classe MenuItem
 
 class MenuItem:
-    def __init__(self, key="", text="", text_format="MENU", commands=None):
+    def __init__(self, key="", text="", text_format="MENU", commands=None, wait_after="True"):
 
         if commands is None:
             commands = {}
@@ -18,12 +19,14 @@ class MenuItem:
         self.__commands = {}
         self.__key_length = 0
         self.__last_return_code = 0
+        self.__wait_after = True
 
         self.set_key(key)
         self.set_text(text)
         self.set_format(text_format)
         self.set_commands(commands)
         self.set_key_length(len(str(key)))
+        self.set_wait_after(wait_after)
 
     # Accesseurs
     def get_key(self):
@@ -32,7 +35,7 @@ class MenuItem:
     def get_text(self):
         return self.__text
 
-    def get_format(self):
+    def get_text_format(self):
         return self.__format
 
     def get_key_length(self):
@@ -44,6 +47,9 @@ class MenuItem:
     def get_commands(self):
         return self.__commands.items()
 
+    def get_wait_after(self):
+        return self.__wait_after
+
     # Mutateurs
     def set_key(self, key):
         self.__key = key
@@ -52,7 +58,7 @@ class MenuItem:
     def set_text(self, text):
         self.__text = text
 
-    def set_format(self, text_format):
+    def set_text_format(self, text_format):
         self.__format = text_format
 
     def set_key_length(self, length):
@@ -60,6 +66,11 @@ class MenuItem:
 
     def set_commands(self, commands):
         self.__commands = commands
+
+    def set_wait_after(self, wait_after):
+        self.__wait_after = False
+        if wait_after == "True":
+            self.__wait_after = True
 
     # Méthodes privées
 
@@ -78,6 +89,9 @@ class MenuItem:
         for my_key, my_command in collections.OrderedDict(sorted(self.__commands.items(),
                                                                  key=lambda t: t[1].get_order())).items():
             self.__last_return_code = my_command.execute()
+        if self.__wait_after:
+            print_fmt("Appuyez sur une touche pour continuer...", "CYAN")
+            readchar.readchar()
         return self.__last_return_code
 
     def print(self):
@@ -86,6 +100,16 @@ class MenuItem:
         else:
             print_fmt(str(self.__key).ljust(self.__key_length) + " : " + self.__text, self.__format, 2)
 
+    def debug(self):
+        print("")
+        print("          === Debug infos ===")
+        print("key                : " + str(self.__key))
+        print("text               : " + self.__text)
+        print("format             : " + self.__format)
+        print("key_length         : " + str(self.__key_length))
+        print("last_return_code   : " + str(self.__last_return_code))
+        print("wait_after         : " + str(self.__wait_after))
+        print("")
 
 #
 # =================================================================================================
