@@ -1,0 +1,66 @@
+---
+  menu:
+    title: Menu DevOps
+    description:
+    - Outils de gestion pour l'infrastructure as a code
+    format: TITRE1
+    id: global
+    items:
+    - id: 1
+      text: Menu Git...
+      format: MENU
+      commands:
+      - command: menu.sh -m git
+        order: 1
+      wait_after: False
+    - id: 3
+      text: Menu AWS...
+      format: MENU
+      commands:
+      - command: menu.sh -m aws
+        order: 1
+      security:
+        authorized_groups:
+        - terraform_aws
+        authorized_users:
+        - herve
+    - id: 2
+      text: Menu Terraform...
+      format: MENU
+      commands:
+      - command: menu.sh -m terraform
+        order: 1
+        wait_after: False
+      security:
+        authorized_groups:
+        - terraform
+        authorized_users:
+        - herve
+    - id: a1
+      text: Changer d'environnement AWS
+      format: MENU
+      commands:
+      - command: scripts/change_environment.sh
+        order: 1
+      security:
+        authorized_groups:
+        - terraform
+        - sambashare
+    - id: a2
+      text: Changer de version de sources
+      format: MENU
+      commands:
+      - command: scripts/git_checkout_tag.sh
+        order: 1
+      - command: scripts/git_pull.sh
+        order: 2
+    - id: a3
+      text: Paramétrage / Initialisations...
+      format: MENU
+      commands:
+      - command: menu.sh -m paramétrage
+        order: 1
+        wait_after: False
+      security:
+        authorized_groups:
+        - terraform

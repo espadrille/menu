@@ -15,7 +15,7 @@ class MenuItem:
             commands = {}
         self.__key = ""
         self.__text = ""
-        self.__format = ""
+        self.__text_format = ""
         self.__commands = {}
         self.__key_length = 0
         self.__last_return_code = 0
@@ -23,7 +23,7 @@ class MenuItem:
 
         self.set_key(key)
         self.set_text(text)
-        self.set_format(text_format)
+        self.set_text_format(text_format)
         self.set_commands(commands)
         self.set_key_length(len(str(key)))
         self.set_wait_after(wait_after)
@@ -36,7 +36,7 @@ class MenuItem:
         return self.__text
 
     def get_text_format(self):
-        return self.__format
+        return self.__text_format
 
     def get_key_length(self):
         return self.__key_length
@@ -59,7 +59,7 @@ class MenuItem:
         self.__text = text
 
     def set_text_format(self, text_format):
-        self.__format = text_format
+        self.__text_format = text_format
 
     def set_key_length(self, length):
         self.__key_length = length
@@ -96,16 +96,16 @@ class MenuItem:
 
     def print(self):
         if type(self.__key) is int:
-            print_fmt(str(self.__key).rjust(self.__key_length) + " : " + self.__text, self.__format, 2)
+            print_fmt(str(self.__key).rjust(self.__key_length) + " : " + self.__text, self.__text_format, 2)
         else:
-            print_fmt(str(self.__key).ljust(self.__key_length) + " : " + self.__text, self.__format, 2)
+            print_fmt(str(self.__key).ljust(self.__key_length) + " : " + self.__text, self.__text_format, 2)
 
     def debug(self):
         print("")
         print("          === Debug infos ===")
         print("key                : " + str(self.__key))
         print("text               : " + self.__text)
-        print("format             : " + self.__format)
+        print("format             : " + self.__text_format)
         print("key_length         : " + str(self.__key_length))
         print("last_return_code   : " + str(self.__last_return_code))
         print("wait_after         : " + str(self.__wait_after))

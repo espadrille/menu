@@ -3,9 +3,13 @@ import collections
 import mimetypes
 import grp
 
+import yaml
+
 from module_globals import *
 from _MenuItem_class import MenuItem
 
+mimetypes.add_type("application/x-yaml", ".yaml")
+mimetypes.add_type("application/x-yaml", ".yml")
 
 # Definition de la classe Menu
 
@@ -98,13 +102,15 @@ class Menu:
 
     def load_file(self, menu_file):
         self.__menu_file = menu_file
-        self.__menu_file_mime_type = mimetypes.MimeTypes().guess_type(self.__menu_file)[0]
+        self.__menu_file_mime_type = mimetypes.guess_type(self.__menu_file)[0]
+        fp = open(self.__menu_file, "r")
         if self.__menu_file_mime_type == "application/json":
-            fp = open(self.__menu_file, "r")
             self.load_json(fp.read())
-            fp.close()
+        elif self.__menu_file_mime_type == "application/x-yaml":
+            self.load_yaml(fp)
         else:
             print_fmt("Format non pris en charge : " + str(self.__menu_file_mime_type), "ERROR")
+        fp.close()
         self.__update()
 
     def load_json(self, json_string):
@@ -114,6 +120,15 @@ class Menu:
             self.__menu_loaded = True
         except Exception as e:
             print_fmt("Format json incorrect dans le fichier [" + self.__menu_file + "]", "ERROR")
+            print_fmt(e.__str__(), "ERROR")
+
+    def load_yaml(self, yaml_fp):
+        try:
+            self.__menu_loaded = False
+            self.__menu = yaml.safe_load(yaml_fp)
+            self.__menu_loaded = True
+        except Exception as e:
+            print_fmt("Format yaml incorrect dans le fichier [" + self.__menu_file + "]", "ERROR")
             print_fmt(e.__str__(), "ERROR")
 
     def print_title(self):
@@ -161,7 +176,7 @@ class Menu:
                 self.print_menu()
                 self.read_choice()
                 if self.__last_choice == "":
-                    print_fmt("=> Abandon...", "MENU")
+                    print_fmt("=> Abandon...", "MENU", 4)
                     exit_menu = True
                 else:
                     self.__last_return_code = self.__s_items[self.__last_choice].execute_commands()
