@@ -35,7 +35,7 @@ Modifiez le fichier /etc/bash.bashrc
 sudo nano /etc/bash.bashrc
 ```
 Ajouter les lignes suivantes à la fin du fichier /etc/bash.bashrc
-```commandline
+```shell
 # Ajoutez les utilisateurs au groupe 'menu' pour 
 # qu'ils accedent au menu avec la commande 'menu'
 if groups | grep &>/dev/null "menu"; then
