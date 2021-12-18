@@ -1,7 +1,7 @@
 {
   "menu": {
     "id"          : "global",
-    "title"       : "Menu DevOps",
+    "title"       : "Menu JSON",
     "description" : [
       "Outils de gestion pour l'infrastructure as a code"
       ],

@@ -1,0 +1,56 @@
+{
+  "menu": {
+    "id": "mon_id",
+    "title": "Mon menu JSON",
+    "description": [
+      "Exemple de fichier json pour paramétrer un menu"
+    ],
+    "format": "TITRE1",
+    "items": [
+      {
+        "id": 1,
+        "text": "Premier item",
+        "format": "MENU",
+        "commands": [
+          {
+            "order": 1,
+            "command": "echo 'Première commande du premier item'"
+          }
+        ]
+      },
+      {
+        "id": "2a2",
+        "text": "Deuxième item",
+        "format": "MENU",
+        "commands": [
+          {
+            "order": 1,
+            "command": "echo 'Première commande du deuxième item'",
+            "wait_after": "True"
+          },
+          {
+            "order": 2,
+            "command": "echo 'Deuxième commande du deuxième item'"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "text": "Troisième item réservé au groupe 'menu'",
+        "format": "GREEN",
+        "commands": [
+          {
+            "order": 1,
+            "command": "echo 'Première commande du troisième item'",
+            "wait_after": "false"
+          }
+        ],
+        "security": {
+          "authorized_groups": [
+            "menu"
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -42,17 +42,13 @@ class Command:
     def execute(self, command_line="", what_if=False):
         if command_line != "":
             self.__command_line = command_line
-        self.print_command_line()
         if what_if:
             print_fmt("*** what_if *** : la commande [" + self.__command_line + "] n'a pas été exécutée",
                       text_format="YELLOW",
                       indent=4
                       )
         else:
-            print_fmt("Execution de la commande [" + self.__command_line + "]",
-                      text_format="YELLOW",
-                      indent=4
-                      )
+            self.print_command_line()
             self.__last_return_code = os.system(self.__command_line)
         if self.__wait_after:
             print_fmt("Appuyez sur une touche pour continuer...", "CYAN")
@@ -60,7 +56,8 @@ class Command:
         return self.__last_return_code
 
     def print_command_line(self):
-        print_fmt(self.__command_line, "COMMAND", 4)
+        print_fmt(text="==> ", indent=2, newline=False)
+        print_fmt(self.__command_line, "COMMAND", 1)
 
     def print(self):
         self.print_command_line()

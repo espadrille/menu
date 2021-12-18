@@ -1,6 +1,6 @@
 ---
   menu:
-    title: Menu DevOps
+    title: Menu YAML
     description:
     - Outils de gestion pour l'infrastructure as a code
     format: TITRE1

@@ -121,7 +121,8 @@ def print_fmt(text, text_format="", indent=0, newline=True):
     elif text_format == "":
         my_color = ""
     else:
-        my_color = COLORS[text_format]
+        if text_format in COLORS:
+            my_color = COLORS[text_format]
 
     if text_format == "TITRE1":
         print("")
@@ -212,7 +213,7 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
         centered_title = ("{:^" + str(line_length) + "}").format(title)
         print_fmt("| " + centered_title + " |", text_format=text_format, indent=indent)
 
-    # Entetes
+    # Entêtes
     if len(headers) > 0:
         print_fmt(separator_line, text_format=text_format, indent=indent)
         header_line = ""
@@ -224,9 +225,9 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
                 header_line = header_line + column_separator
 
             if "|" in my_header:
-                tabmy_header = my_header.split("|")
-                my_header = tabmy_header[0].strip()
-                for MyCommand in tabmy_header[1].split(","):
+                my_header_array = my_header.split("|")
+                my_header = my_header_array[0].strip()
+                for MyCommand in my_header_array[1].split(","):
                     key = MyCommand.split("=")[0]
                     value = MyCommand.split("=")[1]
                     if key == "align":

@@ -158,28 +158,34 @@ class Menu:
         str_keys = [str(key) for key in self.__items.keys()]
         if self.__sorted:
             str_keys.sort()
-        self.__last_choice = read_fmt("Votre choix parmi " + str(str_keys))
+        self.__last_choice = read_fmt("Votre choix parmi [" + ", ".join(str_keys) + "]")
         while not (str(self.__last_choice) in str_keys or str(self.__last_choice) == ""):
             print_fmt("Choisissez parmi les valeurs proposées " + str(str_keys), "ERROR")
-            self.__last_choice = read_fmt("Votre choix parmi " + str(str_keys))
+            self.__last_choice = read_fmt("Votre choix parmi [" + ", ".join(str_keys) + "]")
 
     def print_menu(self):
         clear_screen()
         self.print_title()
         self.print_description()
         self.print_items()
+        print_fmt("")
 
     def execute(self):
         if self.__menu_loaded:
             exit_menu = False
             while not exit_menu:
                 self.print_menu()
-                self.read_choice()
-                if self.__last_choice == "":
-                    print_fmt("=> Abandon...", "MENU", 4)
-                    exit_menu = True
+                if len(self.__items) > 0:
+                    self.read_choice()
+                    if self.__last_choice == "":
+                        print_fmt("=> Abandon...", "MENU", 4)
+                        exit_menu = True
+                    else:
+                        self.__last_return_code = self.__s_items[self.__last_choice].execute_commands()
                 else:
-                    self.__last_return_code = self.__s_items[self.__last_choice].execute_commands()
+                    print_fmt("Aucun item a proposer. Complétez le fichier " + self.__menu_file + " !", "ERROR")
+                    self.__last_return_code = -1
+                    exit_menu = True
 
             return self.__last_return_code
         else:
