@@ -49,8 +49,13 @@ class Command:
                       )
         else:
             self.print_command_line()
-            self.__last_return_code = os.system(self.__command_line)
-        if self.__wait_after:
+            try:
+                self.__last_return_code = os.system(self.__command_line)
+            except Exception as e:
+                print_fmt(e.__str__(), "ERROR")
+                print_fmt("Code retour de la commande : " + str(self.__last_return_code), "ERROR")
+
+        if self.__wait_after or self.__last_return_code != 0:
             print_fmt("Appuyez sur une touche pour continuer...", "CYAN")
             readchar.readchar()
         return self.__last_return_code

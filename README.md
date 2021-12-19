@@ -28,21 +28,12 @@ Enregistrer votre utilisateur dans le groupe 'menu' (remplacez ```<votre_login>`
 ```commandline
 sudo usermod --append --groups menu <votre_login>
 ```
-Pour utiliser le menu en tapant simplement 'menu', il faut créer un alias
-à l'ouverture de session pour tous les membres du groupe 'menu'.
+Pour utiliser le menu en tapant simplement 'menu', il faut créer un lien symbolic
+vers le script menu.py dans le dossier /usr/local/bin.
 Modifiez le fichier /etc/bash.bashrc
 ```commandline
-sudo nano /etc/bash.bashrc
+sudo ln -s /home/menu/menu/bin/menu.py /usr/local/bin/menu
 ```
-Ajouter les lignes suivantes à la fin du fichier /etc/bash.bashrc
-```shell
-# Ajoutez les utilisateurs au groupe 'menu' pour 
-# qu'ils accedent au menu avec la commande 'menu'
-if groups | grep &>/dev/null "menu"; then
-    alias menu="/home/menu/menu/bin/menu.py"
-fi
-```
-Enregistrer le fichier.
 La phase d'installation proprement dite est terminée. Il reste à créer un fichier de configuration pour le menu.
 
 Créez un nouveau fichier ~/.menu/menu.json avec le contenu suivant

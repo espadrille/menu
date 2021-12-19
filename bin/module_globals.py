@@ -96,7 +96,7 @@ def print_fmt(text, text_format="", indent=0, newline=True):
 
     screen_heigth, screen_width = os.popen('stty size', 'r').read().split()
 
-    my_text = text.rstrip()
+    my_text = str(text).rstrip()
     my_color = ""
     my_indent = indent
     if text_format == "TITRE1":
