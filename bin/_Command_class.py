@@ -21,6 +21,9 @@ class Command:
     def get_command_line(self):
         return self.__command_line
 
+    def get_wait_after(self):
+        return self.__wait_after
+
     def get_last_return_code(self):
         return self.__last_return_code
 

@@ -86,10 +86,13 @@ class MenuItem:
         self.__commands[new_command.get_order()] = new_command
 
     def execute_commands(self):
+        wait_after_command = False
         for my_key, my_command in collections.OrderedDict(sorted(self.__commands.items(),
                                                                  key=lambda t: t[1].get_order())).items():
             self.__last_return_code = my_command.execute()
-        if self.__wait_after:
+            wait_after_command = my_command.get_wait_after()
+        # Attendre après l'exécution si c'est demandé et si la commande ne l'a pas déjà fait
+        if self.__wait_after and (not wait_after_command) and self.__last_return_code == 0:
             print_fmt("Appuyez sur une touche pour continuer...", "CYAN")
             readchar.readchar()
         return self.__last_return_code
