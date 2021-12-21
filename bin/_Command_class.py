@@ -1,8 +1,6 @@
 # Import des modules
-import shlex
-import subprocess
-
 import readchar
+import subprocess
 
 from module_globals import *
 

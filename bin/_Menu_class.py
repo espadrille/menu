@@ -1,8 +1,7 @@
 # Import des modules
 import collections
-import mimetypes
 import grp
-
+import mimetypes
 import yaml
 
 from module_globals import *

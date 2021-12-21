@@ -1,10 +1,8 @@
 # Import des modules
-import subprocess
-
-from module_globals import *
-import _Command_class
 import collections
 import readchar
+
+from module_globals import *
 from _Command_class import Command
 
 
