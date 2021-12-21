@@ -114,6 +114,7 @@ class MenuItem(object):
         print("wait_after         : " + str(self.__wait_after))
         print("")
 
+
 #
 # =================================================================================================
 # Test du module
