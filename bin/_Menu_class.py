@@ -13,7 +13,7 @@ mimetypes.add_type("application/x-yaml", ".yml")
 
 # Definition de la classe Menu
 
-class Menu:
+class Menu(object):
     def __init__(self, menu_file="", sort_items=False):
         self.__id = ""  # Identifiant du menu
         self.__title = ""  # Titre du menu

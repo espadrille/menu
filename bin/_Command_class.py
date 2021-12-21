@@ -9,7 +9,7 @@ from module_globals import *
 
 # Definition de la classe Command
 
-class Command:
+class Command(object):
     def __init__(self, order=0, command_line="", wait_after=False):
         self.__order = order
         self.__command_line = command_line

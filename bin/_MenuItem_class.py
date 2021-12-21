@@ -1,4 +1,6 @@
 # Import des modules
+import subprocess
+
 from module_globals import *
 import _Command_class
 import collections
@@ -8,7 +10,7 @@ from _Command_class import Command
 
 # Definition de la classe MenuItem
 
-class MenuItem:
+class MenuItem(object):
     def __init__(self, key="", text="", text_format="MENU", commands=None, wait_after="True"):
 
         if commands is None:
