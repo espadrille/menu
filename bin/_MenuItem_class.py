@@ -79,8 +79,8 @@ class MenuItem:
         new_command = Command()
         if "order" in command:
             new_command.set_order(command["order"])
-        if "command" in command:
-            new_command.set_command_line(command["command"])
+        if "command_line" in command:
+            new_command.set_command_line(command["command_line"])
         if "wait_after" in command:
             new_command.set_wait_after(command["wait_after"])
         self.__commands[new_command.get_order()] = new_command
@@ -91,7 +91,7 @@ class MenuItem:
                                                                  key=lambda t: t[1].get_order())).items():
             self.__last_return_code = my_command.execute()
             wait_after_command = my_command.get_wait_after()
-        # Attendre après l'exécution si c'est demandé et si la commande ne l'a pas déjà fait
+        # Attendre après l'exécution si c'est demandé et si la dernière commande ne l'a pas déjà fait
         if self.__wait_after and (not wait_after_command) and self.__last_return_code == 0:
             print_fmt("Appuyez sur une touche pour continuer...", "CYAN")
             readchar.readchar()

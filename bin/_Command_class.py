@@ -1,6 +1,10 @@
 # Import des modules
-from module_globals import *
+import shlex
+import subprocess
+
 import readchar
+
+from module_globals import *
 
 
 # Definition de la classe Command
@@ -54,11 +58,8 @@ class Command:
             self.print_command_line()
             try:
                 # Exécution de la commande
-                # Tester l'utilisation de subprocess :
-                # result = subprocess.run(
-                #     [sys.executable, "-c", "import sys; print(sys.stdin.read())"], input=b"underwater"
-                # )
-                self.__last_return_code = os.system(self.__command_line)
+                p = subprocess.run(self.__command_line, shell=True)
+                self.__last_return_code = p.returncode
             except Exception as e:
                 print_fmt(e.__str__(), "ERROR")
                 print_fmt("Code retour de la commande : " + str(self.__last_return_code), "ERROR")
