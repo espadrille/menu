@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 # Import des modules
-import os
 from optparse import OptionParser
 from module_globals import *
 

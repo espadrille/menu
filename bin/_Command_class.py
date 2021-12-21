@@ -53,6 +53,11 @@ class Command:
         else:
             self.print_command_line()
             try:
+                # Exécution de la commande
+                # Tester l'utilisation de subprocess :
+                # result = subprocess.run(
+                #     [sys.executable, "-c", "import sys; print(sys.stdin.read())"], input=b"underwater"
+                # )
                 self.__last_return_code = os.system(self.__command_line)
             except Exception as e:
                 print_fmt(e.__str__(), "ERROR")
