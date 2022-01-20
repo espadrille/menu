@@ -12,7 +12,7 @@ parser = OptionParser()
 parser.add_option("-f",
                   "--menu-file",
                   dest="menu_file",
-                  help="Fichier de menu",
+                  help="Chemin complet du fichier de menu au format json ou yaml",
                   default=os.path.expanduser('~') + "/.menu/menu.json"
                   )
 (options, args) = parser.parse_args()

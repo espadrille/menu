@@ -126,3 +126,8 @@ Et le menu s'affiche
 
 Votre choix parmi [1, 2a2, 3] :
 ```
+Vous pouvez exécuter directement un item de menu en passant son option en argument. Exemple :
+```commandline
+menu 3
+```
+Cette commande exécute en mode automatique l'option 2a2 du menu. Dans ce mode, le menu n'est pas affiché. Seule la commande exécutée et sa ses messages sont affichés. La fonctionnalité "wait_after" est ignorée dans ce mode. Ainsi, toute interaction est supprimée de l'exécution. Ceci permet d'inclure des commandes 'menu' dans des scripts.

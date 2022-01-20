@@ -102,16 +102,20 @@ class Menu(object):
 
     def load_file(self, menu_file):
         self.__menu_file = menu_file
-        self.__menu_file_mime_type = mimetypes.guess_type(self.__menu_file)[0]
-        fp = open(self.__menu_file, "r")
-        if self.__menu_file_mime_type == "application/json":
-            self.load_json(fp.read())
-        elif self.__menu_file_mime_type == "application/x-yaml":
-            self.load_yaml(fp)
-        else:
-            print_fmt("Format non pris en charge : " + str(self.__menu_file_mime_type), "ERROR")
-        fp.close()
-        self.__update()
+        try:
+            self.__menu_file_mime_type = mimetypes.guess_type(self.__menu_file)[0]
+            fp = open(self.__menu_file, "r")
+            if self.__menu_file_mime_type == "application/json":
+                self.load_json(fp.read())
+            elif self.__menu_file_mime_type == "application/x-yaml":
+                self.load_yaml(fp)
+            else:
+                print_fmt("Format non pris en charge : " + str(self.__menu_file_mime_type), "ERROR")
+            fp.close()
+            self.__update()
+        except Exception as e:
+            print_fmt("Impossible de lire le fichier de menu [" + self.__menu_file + "]", "ERROR")
+            print_fmt(e.__str__(), "ERROR")
 
     def load_json(self, json_string):
         try:
@@ -218,7 +222,7 @@ class Menu(object):
 #
 if __name__ == "__main__":
     my_menu = Menu()
-    my_menu.load_file(str(Path.home()) + "/.menu/menu.json")
+    my_menu.load_file(str(Path.home()) + "/git/menu/.menu/menu_example.json")
 
     my_menu.sort()
     my_menu.execute(["3"])

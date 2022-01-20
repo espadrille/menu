@@ -14,7 +14,7 @@
         "commands": [
           {
             "order": 1,
-            "command": "echo 'Première commande du premier item'"
+            "command_line": "echo 'Première commande du premier item'"
           }
         ]
       },
@@ -25,12 +25,12 @@
         "commands": [
           {
             "order": 1,
-            "command": "echo 'Première commande du deuxième item'",
+            "command_line": "echo 'Première commande du deuxième item'",
             "wait_after": "True"
           },
           {
             "order": 2,
-            "command": "echo 'Deuxième commande du deuxième item'"
+            "command_line": "echo 'Deuxième commande du deuxième item'"
           }
         ]
       },
@@ -41,7 +41,7 @@
         "commands": [
           {
             "order": 1,
-            "command": "echo 'Première commande du troisième item'",
+            "command_line": "echo 'Première commande du troisième item'",
             "wait_after": "false"
           }
         ],
