@@ -54,7 +54,7 @@ Créez un nouveau fichier ~/.menu/menu.json avec le contenu suivant
         "commands": [
           {
             "order": 1,
-            "command": "echo 'Première commande du premier item'"
+            "command_line": "echo 'Première commande du premier item'"
           }
         ]
       },
@@ -65,12 +65,12 @@ Créez un nouveau fichier ~/.menu/menu.json avec le contenu suivant
         "commands": [
           {
             "order": 1,
-            "command": "echo 'Première commande du deuxième item'",
+            "command_line": "echo 'Première commande du deuxième item'",
             "wait_after": "True"
           },
           {
             "order": 2,
-            "command": "echo 'Deuxième commande du deuxième item'"
+            "command_line": "echo 'Deuxième commande du deuxième item'"
           }
         ]
       },
@@ -81,7 +81,7 @@ Créez un nouveau fichier ~/.menu/menu.json avec le contenu suivant
         "commands": [
           {
             "order": 1,
-            "command": "echo 'Première commande du troisième item'",
+            "command_line": "echo 'Première commande du troisième item'",
             "wait_after": "false"
           }
         ],
@@ -130,4 +130,9 @@ Vous pouvez exécuter directement un item de menu en passant son option en argum
 ```commandline
 menu 3
 ```
-Cette commande exécute en mode automatique l'option 2a2 du menu. Dans ce mode, le menu n'est pas affiché. Seule la commande exécutée et sa ses messages sont affichés. La fonctionnalité "wait_after" est ignorée dans ce mode. Ainsi, toute interaction est supprimée de l'exécution. Ceci permet d'inclure des commandes 'menu' dans des scripts.
+Cette commande exécute en mode automatique l'option 2a2 du menu.
+```text
+  ==> echo 'Première commande du troisième item'
+Première commande du troisième item
+```
+Note : Dans ce mode, le menu n'est pas affiché. Seule la commande exécutée et sa ses messages sont affichés. La fonctionnalité "wait_after" est ignorée dans ce mode. Ainsi, toute interaction est supprimée de l'exécution. Ceci permet d'inclure des commandes 'menu' dans des scripts.
