@@ -6,6 +6,7 @@ import yaml
 
 from module_globals import *
 from _MenuItem_class import MenuItem
+from pathlib import Path
 
 mimetypes.add_type("application/x-yaml", ".yaml")
 mimetypes.add_type("application/x-yaml", ".yml")
@@ -217,9 +218,9 @@ class Menu(object):
 #
 if __name__ == "__main__":
     my_menu = Menu()
-    my_menu.load_file("../../.menu/menu.json")
+    my_menu.load_file(str(Path.home()) + "/.menu/menu.json")
 
     my_menu.sort()
-    my_menu.execute(["1"])
+    my_menu.execute(["3"])
 
     my_menu.debug()
