@@ -177,13 +177,17 @@ class Menu(object):
                 if len(self.__items) > 0:
                     if len(extra_arguments) > 0:
                         self.__last_choice = extra_arguments.pop(0)
+                        self.__s_items[self.__last_choice].set_wait_after("False")
+                        exit_menu = True
                     else:
                         self.read_choice()
+
                     if self.__last_choice == "":
                         print_fmt("=> Abandon...", "MENU", 4)
                         exit_menu = True
                     else:
                         self.__last_return_code = self.__s_items[self.__last_choice].execute_commands(extra_arguments)
+
                 else:
                     print_fmt("Aucun item a proposer. Complétez le fichier " + self.__menu_file + " !", "ERROR")
                     self.__last_return_code = -1
@@ -212,9 +216,9 @@ class Menu(object):
 #
 if __name__ == "__main__":
     my_menu = Menu()
-    my_menu.load_file("../json/menu.json")
+    my_menu.load_file("../../.menu/menu.json")
 
     my_menu.sort()
-    my_menu.execute()
+    my_menu.execute(["1"])
 
     my_menu.debug()
