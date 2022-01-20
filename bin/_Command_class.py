@@ -44,9 +44,11 @@ class Command(object):
     # Méthodes privées
 
     # Méthodes publiques
-    def execute(self, command_line="", what_if=False):
+    def execute(self, command_line="", what_if=False, extra_arguments=[]):
         if command_line != "":
             self.__command_line = command_line
+        if len(extra_arguments) > 0:
+            self.__command_line = self.__command_line + ' ' + ' '.join(extra_arguments) 
         if what_if:
             print_fmt("*** what_if *** : la commande [" + self.__command_line + "] n'a pas été exécutée",
                       text_format="YELLOW",

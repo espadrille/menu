@@ -169,18 +169,21 @@ class Menu(object):
         self.print_items()
         print_fmt("")
 
-    def execute(self):
+    def execute(self, extra_arguments=[]):
         if self.__menu_loaded:
             exit_menu = False
             while not exit_menu:
                 self.print_menu()
                 if len(self.__items) > 0:
-                    self.read_choice()
+                    if len(extra_arguments) > 0:
+                        self.__last_choice = extra_arguments.pop(0)
+                    else:
+                        self.read_choice()
                     if self.__last_choice == "":
                         print_fmt("=> Abandon...", "MENU", 4)
                         exit_menu = True
                     else:
-                        self.__last_return_code = self.__s_items[self.__last_choice].execute_commands()
+                        self.__last_return_code = self.__s_items[self.__last_choice].execute_commands(extra_arguments)
                 else:
                     print_fmt("Aucun item a proposer. Complétez le fichier " + self.__menu_file + " !", "ERROR")
                     self.__last_return_code = -1

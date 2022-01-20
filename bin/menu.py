@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # Import des modules
+from ast import arg
 from optparse import OptionParser
 from module_globals import *
 
@@ -27,4 +28,5 @@ my_menu = Menu(options.menu_file,
                )
 
 # Execution du menu
-my_menu.execute()
+
+my_menu.execute(args)
