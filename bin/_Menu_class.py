@@ -173,7 +173,8 @@ class Menu(object):
         if self.__menu_loaded:
             exit_menu = False
             while not exit_menu:
-                self.print_menu()
+                if len(extra_arguments) == 0:
+                    self.print_menu()
                 if len(self.__items) > 0:
                     if len(extra_arguments) > 0:
                         self.__last_choice = extra_arguments.pop(0)
