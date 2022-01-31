@@ -30,7 +30,6 @@ sudo usermod --append --groups menu <votre_login>
 ```
 Pour utiliser le menu en tapant simplement 'menu', il faut créer un lien symbolic
 vers le script menu.py dans le dossier /usr/local/bin.
-Modifiez le fichier /etc/bash.bashrc
 ```commandline
 sudo ln -s /home/menu/menu/bin/menu.py /usr/local/bin/menu
 ```
