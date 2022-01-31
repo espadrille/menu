@@ -129,7 +129,7 @@ Vous pouvez exécuter directement un item de menu en passant son option en argum
 ```commandline
 menu 3
 ```
-Cette commande exécute en mode automatique l'option 2a2 du menu.
+Cette commande exécute en mode automatique l'option 3 du menu.
 ```text
   ==> echo 'Première commande du troisième item'
 Première commande du troisième item
