@@ -13,6 +13,8 @@
       - command: menu.sh -m git
         order: 1
       wait_after: False
+      conditions:
+      - git status
     - id: 3
       text: Menu AWS...
       format: MENU
