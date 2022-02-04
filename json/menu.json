@@ -17,7 +17,10 @@
             "command"    : "menu.sh -m git"
           }
         ],
-        "wait_after" : "False"
+        "wait_after" : "False",
+        "conditions" : [
+          "git status"
+        ]
       },
       {
         "id"		: 3,

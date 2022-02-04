@@ -2,6 +2,7 @@
 import collections
 import grp
 import mimetypes
+import subprocess
 import yaml
 
 from module_globals import *
@@ -10,6 +11,7 @@ from pathlib import Path
 
 mimetypes.add_type("application/x-yaml", ".yaml")
 mimetypes.add_type("application/x-yaml", ".yml")
+
 
 # Definition de la classe Menu
 
@@ -25,8 +27,8 @@ class Menu(object):
         self.__menu = dict()  # Contenu de l'objet menu
         self.__menu_file = ""  # Chemin d'accès au fichier de menu
         self.__menu_loaded = False  # Indique si un menu a été chargé
-        self.__menu_file_mime_type = ""  # Type mime du fichier de menu (actuellement, seul 'application.json' est
-        # supporté
+        self.__menu_file_mime_type = ""  # Type mime du fichier de menu (actuellement,
+        # 'application/json' et 'application/x-yaml' sont supportés)
 
         self.__sorted = sort_items  # Indique s'il faut trier les items de menu par le champ 'id'
         self.__last_choice = ""  # Clé de l'item choisi par l'utilisateur
@@ -59,6 +61,11 @@ class Menu(object):
             if "items" in self.__menu["menu"]:
                 for my_item in self.__menu["menu"]["items"]:
                     authorized = True
+                    if "conditions" in my_item:
+                        for my_condition in my_item["conditions"]:
+                            p = subprocess.run(my_condition, shell=True)
+                            if not p.returncode == 0:
+                                authorized = False
                     if "security" in my_item:
                         authorized = False
                         if "authorized_groups" in my_item["security"]:
@@ -222,9 +229,10 @@ class Menu(object):
 #
 if __name__ == "__main__":
     my_menu = Menu()
-    my_menu.load_file(str(Path.home()) + "/git/menu/.menu/menu_example.json")
+#    my_menu.load_file(str(Path.home()) + "/git/menu/.menu/menu_example.json")
+    my_menu.load_file(str(Path.home()) + "/git/menu/json/menu.json")
 
     my_menu.sort()
-    my_menu.execute(["3"])
+    my_menu.execute()
 
     my_menu.debug()
