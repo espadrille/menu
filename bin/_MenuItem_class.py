@@ -91,6 +91,8 @@ class MenuItem(object):
                                                                  key=lambda t: t[1].get_order())).items():
             self.__last_return_code = my_command.execute(extra_arguments=extra_arguments)
             wait_after_command = my_command.get_wait_after()
+            if self.__last_return_code != 0:
+                break
         # Attendre après l'exécution si c'est demandé et si la dernière commande ne l'a pas déjà fait
         if self.__wait_after and (not wait_after_command) and self.__last_return_code == 0 and len(extra_arguments) == 0:
             print_fmt("Appuyez sur une touche pour continuer...", "CYAN")
