@@ -4,6 +4,12 @@ Projet de menu en python
 
 ## Installation
 
+Pré-requis : installer python et ses dépendances
+```commandline
+pip3 install pyyaml
+pip3 install readchar
+```
+
 Créer un utilisateur 'menu' :
 ```commandline
 sudo adduser menu
