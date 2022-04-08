@@ -69,7 +69,7 @@ class MenuItem(object):
 
     def set_wait_after(self, wait_after):
         self.__wait_after = False
-        if wait_after == "True":
+        if wait_after.lower() == "true":
             self.__wait_after = True
 
     # Méthodes privées
