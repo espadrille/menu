@@ -59,10 +59,11 @@ class Command(object):
             try:
                 # Exécution de la commande
                 p = subprocess.run(self.__command_line, shell=True)
-                self.__last_return_code = p.returncode
             except Exception as e:
                 print_fmt(e.__str__(), "ERROR")
-                print_fmt("Code retour de la commande : " + str(self.__last_return_code), "ERROR")
+                print_fmt("Code retour de la commande : " + str(p.returncode), "ERROR")
+            finally:
+                self.__last_return_code = p.returncode
 
         if (self.__wait_after and len(extra_arguments) == 0) or self.__last_return_code != 0:
             print_fmt("Appuyez sur une touche pour continuer...", "CYAN")
