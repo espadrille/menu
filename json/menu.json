@@ -1,102 +1,56 @@
 {
   "menu": {
-    "id"          : "global",
-    "title"       : "Menu JSON",
-    "description" : [
-      "Outils de gestion pour l'infrastructure as a code"
-      ],
-    "format"      : "TITRE1",
-    "items"       : [
+    "id": "mon_id",
+    "title": "Mon menu JSON",
+    "description": [
+      "Exemple de fichier json pour paramétrer un menu"
+    ],
+    "format": "TITRE1",
+    "items": [
       {
-        "id"		: 1,
-        "text"      : "Menu Git...",
-        "format"    : "MENU",
-        "commands"  : [
-          {
-            "order"      : 1,
-            "command"    : "menu.sh -m git"
-          }
-        ],
-        "wait_after" : "False",
-        "conditions" : [
-          "git status"
-        ]
-      },
-      {
-        "id"		: 3,
-        "text"      : "Menu AWS...",
-        "format"    : "MENU",
-        "commands"  : [
-          {
-            "order"      : 1,
-            "command"    : "menu.sh -m aws"
-            }
-          ],
-        "security": {
-          "authorized_groups"  : ["terraform_aws"],
-          "authorized_users"   : ["herve"]
-          }
-        },
-      {
-        "id"		: 2,
-        "text"      : "Menu Terraform...",
-        "format"    : "MENU",
-        "commands"  : [
-          {
-            "order"      : 1,
-            "command"    : "menu.sh -m terraform",
-            "wait_after" : "false"
-            }
-          ],
-        "security": {
-          "authorized_groups"  : ["terraform"],
-          "authorized_users"   : ["herve"]
-         }
-        },
-      {
-        "id"		: "a1",
-        "text"      : "Changer d'environnement AWS (compte AWS)",
-        "format"    : "MENU",
-        "commands"  : [
-          {
-            "order"      : 1,
-            "command"    : "scripts/change_environment.sh"
-            }
-          ],
-        "security": {
-          "authorized_groups"  : ["terraform", "sambashare"]
-          }
-        },
-      {
-        "id": "a2",
-        "text": "Changer de version de sources (branche ou tag)",
+        "id": 1,
+        "text": "Premier item",
         "format": "MENU",
         "commands": [
           {
             "order": 1,
-            "command": "scripts/git_checkout_tag.sh"
-          },
-          {
-            "order": 2,
-            "command": "scripts/git_pull.sh"
+            "command_line": "echo 'Première commande du premier item'"
           }
         ]
       },
       {
-        "id"		: "a3",
-        "text"      : "Paramétrage / Initialisations...",
-        "format"    : "MENU",
-        "commands"  : [
+        "id": "2a2",
+        "text": "Deuxième item",
+        "format": "MENU",
+        "commands": [
           {
-            "order"      : 1,
-            "command"    : "menu.sh -m paramétrage",
-            "wait_after" : "False"
-            }
-          ],
-        "security": {
-          "authorized_groups"  : ["terraform"]
+            "order": 1,
+            "command_line": "echo 'Première commande du deuxième item'",
+            "wait_after": "True"
+          },
+          {
+            "order": 2,
+            "command_line": "echo 'Deuxième commande du deuxième item'"
           }
+        ]
+      },
+      {
+        "id": 3,
+        "text": "Troisième item réservé au groupe 'menu'",
+        "format": "GREEN",
+        "commands": [
+          {
+            "order": 1,
+            "command_line": "echo 'Première commande du troisième item'",
+            "wait_after": "false"
+          }
+        ],
+        "security": {
+          "authorized_groups": [
+            "menu"
+          ]
         }
-      ]
-    }
+      }
+    ]
   }
+}
