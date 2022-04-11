@@ -9,7 +9,7 @@ from _Command_class import Command
 # Definition de la classe MenuItem
 
 class MenuItem(object):
-    def __init__(self, key="", text="", text_format="MENU", commands=None, wait_after="True"):
+    def __init__(self, key="", text="", text_format="MENU", commands=None, wait_after="False"):
 
         if commands is None:
             commands = {}
@@ -69,7 +69,7 @@ class MenuItem(object):
 
     def set_wait_after(self, wait_after):
         self.__wait_after = False
-        if wait_after.lower() == "true":
+        if str(wait_after).lower() == "true":
             self.__wait_after = True
 
     # Méthodes privées

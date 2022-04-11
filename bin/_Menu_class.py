@@ -121,7 +121,7 @@ class Menu(object):
             fp.close()
             self.__update()
         except Exception as e:
-            print_fmt("Impossible de lire le fichier de menu [" + self.__menu_file + "]", "ERROR")
+            print_fmt("Impossible de charger le fichier de menu [" + self.__menu_file + "]", "ERROR")
             print_fmt(e.__str__(), "ERROR")
 
     def load_json(self, json_string):
