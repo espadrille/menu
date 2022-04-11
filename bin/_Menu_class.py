@@ -148,7 +148,7 @@ class Menu(object):
     def print_description(self):
         for my_line in self.__description:
             print_fmt(my_line, "MENU", 2)
-            print_fmt("", "MENU")
+        print_fmt("", "MENU")
 
     def print_items(self):
         if self.__sorted:
