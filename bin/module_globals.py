@@ -40,15 +40,11 @@ STYLE_COLORS = {
 }
 
 STYLE_INDENTS = {
-    "COMMAND": 0,
     "TITRE1": 8,
     "TITRE2": 4,
     "TITRE3": 2,
-    "MENU": 0,
-    "OK": 0,
-    "WARNING": 0,
-    "ERROR": 0
 }
+
 
 class GlobalVars:
     def __init__(self):
@@ -78,7 +74,7 @@ def clear_screen():
     if os.name == 'posix':
         _ = os.system('clear')
     else:
-        # It is for Windows platfrom
+        # It is for Windows platform
         _ = os.system('cls')
 
 
@@ -161,13 +157,13 @@ def print_fmt(text, text_format="", indent=0, newline=True):
         print("")
 
 
-def print_tab(title="", headers=[], datas=[], footer=None, text_format="", indent=0, separator="|"):
+def print_tab(title="", headers=[], datas=[], footer=None, text_format="", indent=0, separator="┃"):
     column_separator = " " + separator + " "
 
     # Calcul des longueurs de champs pour ajuster la taille des colonnes du tableau
     # Le tableau $LongueurChamps contient une valeur pour chaque colonne
-    field_lengths = []           # Longueurs totales des champs
-    field_lengths_printable = [] # Longueurs des champs sans les codes couleur
+    field_lengths = []  # Longueurs totales des champs
+    field_lengths_printable = []  # Longueurs des champs sans les codes couleur
 
     # Initialiser les largeurs de colonnes en parcourant les entêtes et les datas
     i_col = 0
@@ -215,7 +211,7 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
 
     # Calcule la longueur de la ligne complete (avec tous les champs), et cré la ligne de séparation avec des '-'
     line_length = 0
-    separator_line = "+-"
+    separator_line = ""
     for MyLength in field_lengths_printable:
         if line_length != 0:
             line_length = line_length + len(column_separator)
@@ -230,20 +226,34 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
     if len(footer) > line_length:
         separator_line = separator_line + repeat("-", len(footer) - line_length)
         line_length = len(footer)
-    separator_line = separator_line + "-+"
+    first_separator_line_title = "┏━" + separator_line.replace("-", "━").replace("+", "━") + "━┓"
+    if separator == "┃":
+        first_separator_line_data = "┏━" + separator_line.replace("-", "━").replace("+", "┳") + "━┓"
+    else:
+        first_separator_line_data = "┏━" + separator_line.replace("-", "━").replace("+", "━") + "━┓"
+    inter_top_separator_line = "┣━" + separator_line.replace("-", "━").replace("+", "┳") + "━┫"
+    inter_middle_separator_line = "┣━" + separator_line.replace("-", "━").replace("+", "╋") + "━┫"
+    inter_bottom_separator_line = "┣━" + separator_line.replace("-", "━").replace("+", "┻") + "━┫"
+    if separator == "┃":
+        last_separator_line_data = "┗━" + separator_line.replace("-", "━").replace("+", "┻") + "━┛"
+    else:
+        last_separator_line_data = "┗━" + separator_line.replace("-", "━").replace("+", "━") + "━┛"
+    last_separator_line_footer = "┗━" + separator_line.replace("-", "━").replace("+", "━") + "━┛"
 
     # Ouverture du tableau
     print_fmt("")
 
     # Titre
     if len(title) > 0:
-        print_fmt("+-" + repeat("-", line_length) + "-+", text_format=text_format, indent=indent)
+        print_fmt(first_separator_line_title, text_format=text_format, indent=indent)
         centered_title = ("{:^" + str(line_length) + "}").format(title)
-        print_fmt("| " + centered_title + " |", text_format=text_format, indent=indent)
+        print_fmt("┃ " + centered_title + " ┃", text_format=text_format, indent=indent)
+        print_fmt(inter_top_separator_line, text_format=text_format, indent=indent)
+    else:
+        print_fmt(first_separator_line_data, text_format=text_format, indent=indent)
 
     # Entêtes
     if len(headers) > 0:
-        print_fmt(separator_line, text_format=text_format, indent=indent)
         header_line = ""
         i_col = 0
 
@@ -270,12 +280,12 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
             else:
                 header_line = header_line + ("{:<" + str(length) + "}").format(my_header)
             i_col = i_col + 1
-        print_fmt("| " + ("{:<" + str(line_length) + "}").format(header_line) + " |", text_format=text_format,
+        print_fmt("┃ " + ("{:<" + str(line_length) + "}").format(header_line) + " ┃", text_format=text_format,
                   indent=indent)
+        print_fmt(inter_middle_separator_line, text_format=text_format, indent=indent)
 
     # datas
     if len(datas) > 0:
-        print_fmt(separator_line, text_format=text_format, indent=indent)
         for my_data_line in datas:
             data_line = ""
             i_col = 0
@@ -332,20 +342,17 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
                 if text_format in COLORS:
                     my_color = COLORS[text_format]
 
-            print_fmt("| " + ("{:<" + str(line_length) + "}").format(data_line) + my_color + " |",
+            print_fmt("┃ " + ("{:<" + str(line_length) + "}").format(data_line) + my_color + " ┃",
                       text_format=text_format,
                       indent=indent)
 
     # Pied
     if len(footer) > 0:
-        print_fmt(separator_line, text_format=text_format, indent=indent)
-        print_fmt("| " + ("{:>" + str(line_length) + "}").format(footer) + " |", text_format=text_format, indent=indent)
-
-    # Fermeture du tableau
-    if len(footer) > 0:
-        print_fmt("+-" + repeat("-", line_length) + "-+", text_format=text_format, indent=indent)
+        print_fmt(inter_bottom_separator_line, text_format=text_format, indent=indent)
+        print_fmt("┃ " + ("{:>" + str(line_length) + "}").format(footer) + " ┃", text_format=text_format, indent=indent)
+        print_fmt(last_separator_line_footer, text_format=text_format, indent=indent)
     else:
-        print_fmt(separator_line, text_format=text_format, indent=indent)
+        print_fmt(last_separator_line_data, text_format=text_format, indent=indent)
 
     print_fmt("")
 
