@@ -28,6 +28,27 @@ COLORS = {
     "RESET": "\033[0m",
 }
 
+STYLE_COLORS = {
+    "COMMAND": COLORS["BLACK"] + COLORS["BK_WHITE"],
+    "TITRE1": COLORS["BOLD"] + COLORS["MAUVE"],
+    "TITRE2": COLORS["BOLD"] + COLORS["MAUVE"],
+    "TITRE3": COLORS["BOLD"] + COLORS["MAUVE"],
+    "MENU": COLORS["BOLD"] + COLORS["MAUVE"],
+    "OK": COLORS["BOLD"] + COLORS["GREEN"],
+    "WARNING": COLORS["BOLD"] + COLORS["YELLOW"],
+    "ERROR": COLORS["BOLD"] + COLORS["RED"]
+}
+
+STYLE_INDENTS = {
+    "COMMAND": 0,
+    "TITRE1": 8,
+    "TITRE2": 4,
+    "TITRE3": 2,
+    "MENU": 0,
+    "OK": 0,
+    "WARNING": 0,
+    "ERROR": 0
+}
 
 class GlobalVars:
     def __init__(self):
@@ -97,29 +118,16 @@ def print_fmt(text, text_format="", indent=0, newline=True):
     screen_heigth, screen_width = os.popen('stty size', 'r').read().split()
 
     my_text = str(text).rstrip()
+    my_indent = 0
+    if indent == 0:
+        if text_format in STYLE_INDENTS:
+            my_indent = STYLE_INDENTS[text_format]
+    else:
+        my_indent = indent
+
     my_color = ""
-    my_indent = indent
-    if text_format == "TITRE1":
-        my_color = COLORS["BOLD"] + COLORS["MAUVE"]
-        my_indent = 8
-    elif text_format == "TITRE2":
-        my_color = COLORS["BOLD"] + COLORS["MAUVE"]
-        my_indent = 4
-    elif text_format == "TITRE3":
-        my_color = COLORS["BOLD"] + COLORS["MAUVE"]
-        my_indent = 2
-    elif text_format == "COMMAND":
-        my_color = COLORS["BLACK"] + COLORS["BK_WHITE"]
-    elif text_format == "MENU":
-        my_color = COLORS["BOLD"] + COLORS["MAUVE"]
-    elif text_format == "OK":
-        my_color = COLORS["BOLD"] + COLORS["GREEN"]
-    elif text_format == "WARNING":
-        my_color = COLORS["BOLD"] + COLORS["YELLOW"]
-    elif text_format == "ERROR":
-        my_color = COLORS["BOLD"] + COLORS["RED"]
-    elif text_format == "":
-        my_color = ""
+    if text_format in STYLE_COLORS:
+        my_color = STYLE_COLORS[text_format]
     else:
         if text_format in COLORS:
             my_color = COLORS[text_format]
@@ -153,16 +161,18 @@ def print_fmt(text, text_format="", indent=0, newline=True):
         print("")
 
 
-def print_tab(title="", headers=[], datas=[], footer=None, text_format="", indent=0):
-    column_separator = " | "
+def print_tab(title="", headers=[], datas=[], footer=None, text_format="", indent=0, separator="|"):
+    column_separator = " " + separator + " "
 
     # Calcul des longueurs de champs pour ajuster la taille des colonnes du tableau
     # Le tableau $LongueurChamps contient une valeur pour chaque colonne
-    field_lengths = []
+    field_lengths = []           # Longueurs totales des champs
+    field_lengths_printable = [] # Longueurs des champs sans les codes couleur
 
     # Initialiser les largeurs de colonnes en parcourant les entêtes et les datas
     i_col = 0
     for my_header in headers:
+        field_lengths_printable.append(len(my_header.split("|")[0].strip()))
         field_lengths.append(len(my_header.split("|")[0].strip()))
         i_col = i_col + 1
     for my_data_line in datas:
@@ -170,16 +180,34 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
         i_col = 0
         if type(my_data_line) is list:
             for my_data in my_data_line:
+                my_data_printable = my_data.split("|")[0].strip()
+                for my_color in COLORS:
+                    my_data_printable = my_data_printable.replace(COLORS[my_color], "")
+
                 if (i_col + 1) > len(field_lengths):
-                    field_lengths.append(len(my_data.split("|")[0].strip()))
-                if len(my_data.split("|")[0].strip()) > field_lengths[i_col]:
-                    field_lengths[i_col] = len(my_data.split("|")[0].strip())
+                    field_lengths.append(len(my_data.split("|")[0]))
+                if len(my_data.split("|")[0]) > field_lengths[i_col]:
+                    field_lengths[i_col] = len(my_data.split("|")[0])
+
+                if (i_col + 1) > len(field_lengths_printable):
+                    field_lengths_printable.append(len(my_data_printable))
+                if len(my_data_printable) > field_lengths_printable[i_col]:
+                    field_lengths_printable[i_col] = len(my_data_printable)
                 i_col = i_col + 1
         else:
+            my_data_printable = my_data_line.split("|")[0].strip()
+            for my_color in COLORS:
+                my_data_printable = my_data_printable.replace(COLORS[my_color], "")
+
             if (i_col + 1) > len(field_lengths):
-                field_lengths.append(len(my_data_line.split("|")[0].strip()))
-            if len(my_data_line.split("|")[0].strip()) > field_lengths[i_col]:
-                field_lengths[i_col] = len(my_data_line.split("|")[0].strip())
+                field_lengths.append(len(my_data_line.split("|")[0]))
+            if len(my_data_line.split("|")[0]) > field_lengths[i_col]:
+                field_lengths[i_col] = len(my_data_line.split("|")[0])
+
+            if (i_col + 1) > len(field_lengths_printable):
+                field_lengths_printable.append(len(my_data_printable))
+            if len(my_data_printable) > field_lengths_printable[i_col]:
+                field_lengths_printable[i_col] = len(my_data_printable)
 
     # Définir une ligne de pied de tableau par défaut
     if footer is None:
@@ -188,7 +216,7 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
     # Calcule la longueur de la ligne complete (avec tous les champs), et cré la ligne de séparation avec des '-'
     line_length = 0
     separator_line = "+-"
-    for MyLength in field_lengths:
+    for MyLength in field_lengths_printable:
         if line_length != 0:
             line_length = line_length + len(column_separator)
             separator_line = separator_line + re.sub("\s", "-", re.sub("\S", "+", column_separator))
@@ -220,7 +248,7 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
         i_col = 0
 
         for my_header in headers:
-            length = field_lengths[i_col]
+            length = field_lengths_printable[i_col]
             if len(header_line) > 0:
                 header_line = header_line + column_separator
 
@@ -242,7 +270,8 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
             else:
                 header_line = header_line + ("{:<" + str(length) + "}").format(my_header)
             i_col = i_col + 1
-        print_fmt("| " + ("{:<" + str(line_length) + "}").format(header_line) + " |", text_format=text_format, indent=indent)
+        print_fmt("| " + ("{:<" + str(line_length) + "}").format(header_line) + " |", text_format=text_format,
+                  indent=indent)
 
     # datas
     if len(datas) > 0:
@@ -277,7 +306,7 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
                     i_col = i_col + 1
             else:
                 # Tableau a 1 dimension
-                length = field_lengths[i_col]
+                length = field_lengths_printable[i_col]
                 if "|" in my_data_line:
                     tab_my_data = my_data_line.split("|")
                     my_data_line = tab_my_data[0].strip()
@@ -296,7 +325,15 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
                 else:
                     data_line = data_line + ("{:<" + str(length) + "}").format(my_data_line)
 
-            print_fmt("| " + ("{:<" + str(line_length) + "}").format(data_line) + " |", text_format=text_format,
+            my_color = ""
+            if text_format in STYLE_COLORS:
+                my_color = STYLE_COLORS[text_format]
+            else:
+                if text_format in COLORS:
+                    my_color = COLORS[text_format]
+
+            print_fmt("| " + ("{:<" + str(line_length) + "}").format(data_line) + my_color + " |",
+                      text_format=text_format,
                       indent=indent)
 
     # Pied
@@ -417,6 +454,17 @@ if __name__ == "__main__":
               footer="C'est le pied !",
               indent=4,
               text_format="CYAN")
+
+    print_tab(headers=["col1", "colonne 2"],
+              datas=[["essai plus long", "test centré plus long|align=center"], ["essai", "test"]],
+              footer="C'est le pied !",
+              indent=4,
+              text_format="CYAN")
+
+    print_tab(datas=[["essai plus long", "test centré|align=center"], ["essai", "test"]],
+              footer="",
+              indent=4,
+              text_format="YELLOW")
 
     print_tab(title="Mon tableau a 1 dimension",
               headers=["col1"],

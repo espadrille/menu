@@ -1,0 +1,72 @@
+{
+  "menu": {
+    "id": "mon_id",
+    "title": "Mon menu JSON",
+    "description": [
+      "Exemple de fichier json pour paramétrer un menu"
+    ],
+    "format": "TITRE1",
+    "headers": [
+      {
+        "id": 1,
+        "text": "Projet",
+        "command_line": "pwd | pcregrep -o1 \".*\\/roots\\/([^\\/]*)(\\/?.*)\"",
+        "color_ok": "YELLOW",
+        "error_message": "Vous n'etes pas dans un dossier de projet terraform"
+      },
+      {
+        "id": 2,
+        "text": "Dossier courant",
+        "command_line": "pwd",
+        "color_ok": "GREEN",
+        "error_message": "Impossible de lire le dossier courant"
+      }
+    ],
+    "items": [
+      {
+        "id": 1,
+        "text": "Premier item",
+        "format": "MENU",
+        "commands": [
+          {
+            "order": 1,
+            "command_line": "echo 'Première commande du premier item'"
+          }
+        ]
+      },
+      {
+        "id": "2a2",
+        "text": "Deuxième item",
+        "format": "MENU",
+        "commands": [
+          {
+            "order": 1,
+            "command_line": "echo 'Première commande du deuxième item'",
+            "wait_after": "True"
+          },
+          {
+            "order": 2,
+            "command_line": "echo 'Deuxième commande du deuxième item'"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "text": "Troisième item réservé au groupe 'menu'",
+        "format": "GREEN",
+        "commands": [
+          {
+            "order": 1,
+            "command_line": "echo 'Première commande du troisième item'",
+            "wait_after": "false"
+          }
+        ],
+        "security": {
+          "authorized_groups": [
+            "menu"
+          ]
+        }
+      }
+    ]
+  }
+}

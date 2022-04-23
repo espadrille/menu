@@ -20,6 +20,7 @@ class Menu(object):
         self.__id = ""  # Identifiant du menu
         self.__title = ""  # Titre du menu
         self.__description = ""  # Description du menu
+        self.__headers = dict()  # Entêtes du menu
         self.__format = ""  # Format d'affichage du menu
         self.__items = dict()  # Collection des items originaux (lus dans le json)
         self.__s_items = dict()  # Collection des items avec les clés converties en chaîne
@@ -56,6 +57,9 @@ class Menu(object):
                 self.__title = self.__menu["menu"]["title"]
             if "description" in self.__menu["menu"]:
                 self.__description = self.__menu["menu"]["description"]
+            if "headers" in self.__menu["menu"]:
+                for my_header in self.__menu["menu"]["headers"]:
+                    self.add_header(my_header)
             if "format" in self.__menu["menu"]:
                 self.__format = self.__menu["menu"]["format"]
             if "items" in self.__menu["menu"]:
@@ -91,6 +95,9 @@ class Menu(object):
                         self.add_item(new_item)
 
     # Méthodes publiques
+    def add_header(self, header):
+        self.__headers[header['id']] = header
+
     def add_item(self, item):
         self.__items[item.get_key()] = item
         self.__s_items[str(item.get_key())] = item
@@ -145,10 +152,28 @@ class Menu(object):
     def print_title(self):
         print_fmt(self.__title, self.__format)
 
+    def print_headers(self):
+        my_datas = []
+        for my_index, my_header in self.__headers.items():
+            try:
+                # Exécution de la commande
+                p = subprocess.run(my_header["command_line"], shell=True, capture_output=True, text=True)
+            except Exception as e:
+                print_fmt(e.__str__(), "ERROR")
+                print_fmt("Code retour de la commande : " + str(p.returncode), "ERROR")
+            if p.returncode == 0:
+                my_datas.append(
+                    [my_header["text"] + "|align=right", (COLORS[my_header["color_ok"]] + p.stdout.strip("\n") + COLORS["RESET"])]
+                )
+            else:
+                my_datas.append(
+                    [my_header["text"] + "|align=right", (COLORS["RED"] + my_header["error_message"] + COLORS["RESET"])]
+                )
+        print_tab(datas=my_datas, footer="", text_format="MENU", separator=":")
+
     def print_description(self):
         for my_line in self.__description:
             print_fmt(my_line, "MENU", 2)
-        print_fmt("", "MENU")
 
     def print_items(self):
         if self.__sorted:
@@ -178,6 +203,7 @@ class Menu(object):
         clear_screen()
         self.print_title()
         self.print_description()
+        self.print_headers()
         self.print_items()
         print_fmt("")
 
@@ -228,9 +254,10 @@ class Menu(object):
 # Test du module
 #
 if __name__ == "__main__":
+    os.chdir("/home/herve/infra_terraform/AWS/roots/FORTIGATE")
     my_menu = Menu()
 #    my_menu.load_file(str(Path.home()) + "/git/menu/.menu/menu_example.json")
-    my_menu.load_file(str(Path.home()) + "/git/menu/json/menu.json")
+    my_menu.load_file(str(Path.home()) + "/git/menu/json/menu2.json")
 
     my_menu.sort()
     my_menu.execute()
