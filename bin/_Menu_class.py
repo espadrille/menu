@@ -173,8 +173,10 @@ class Menu(object):
             print_tab(datas=my_datas, footer="", text_format="MENU", separator=":")
 
     def print_description(self):
-        for my_line in self.__description:
-            print_fmt(my_line, "MENU", 2)
+        if len(self.__description) > 0:
+            for my_line in self.__description:
+                print_fmt(my_line, "MENU", 2)
+            print_fmt("")
 
     def print_items(self):
         if self.__sorted:

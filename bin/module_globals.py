@@ -240,9 +240,6 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
         last_separator_line_data = "┗━" + separator_line.replace("-", "━").replace("+", "━") + "━┛"
     last_separator_line_footer = "┗━" + separator_line.replace("-", "━").replace("+", "━") + "━┛"
 
-    # Ouverture du tableau
-    print_fmt("")
-
     # Titre
     if len(title) > 0:
         print_fmt(first_separator_line_title, text_format=text_format, indent=indent)
@@ -353,8 +350,6 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
         print_fmt(last_separator_line_footer, text_format=text_format, indent=indent)
     else:
         print_fmt(last_separator_line_data, text_format=text_format, indent=indent)
-
-    print_fmt("")
 
 
 def read_fmt(question, default="", format="CYAN", indent=0, newline=False):
