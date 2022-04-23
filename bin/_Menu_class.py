@@ -153,23 +153,24 @@ class Menu(object):
         print_fmt(self.__title, self.__format)
 
     def print_headers(self):
-        my_datas = []
-        for my_index, my_header in self.__headers.items():
-            try:
-                # Exécution de la commande
-                p = subprocess.run(my_header["command_line"], shell=True, capture_output=True, text=True)
-            except Exception as e:
-                print_fmt(e.__str__(), "ERROR")
-                print_fmt("Code retour de la commande : " + str(p.returncode), "ERROR")
-            if p.returncode == 0:
-                my_datas.append(
-                    [my_header["text"] + "|align=right", (COLORS[my_header["color_ok"]] + p.stdout.strip("\n") + COLORS["RESET"])]
-                )
-            else:
-                my_datas.append(
-                    [my_header["text"] + "|align=right", (COLORS["RED"] + my_header["error_message"] + COLORS["RESET"])]
-                )
-        print_tab(datas=my_datas, footer="", text_format="MENU", separator=":")
+        if len(self.__headers.items()) > 0:
+            my_datas = []
+            for my_index, my_header in self.__headers.items():
+                try:
+                    # Exécution de la commande
+                    p = subprocess.run(my_header["command_line"], shell=True, capture_output=True, text=True)
+                except Exception as e:
+                    print_fmt(e.__str__(), "ERROR")
+                    print_fmt("Code retour de la commande : " + str(p.returncode), "ERROR")
+                if p.returncode == 0:
+                    my_datas.append(
+                        [my_header["text"] + "|align=right", (COLORS[my_header["color_ok"]] + p.stdout.strip("\n") + COLORS["RESET"])]
+                    )
+                else:
+                    my_datas.append(
+                        [my_header["text"] + "|align=right", (COLORS["RED"] + my_header["error_message"] + COLORS["RESET"])]
+                    )
+            print_tab(datas=my_datas, footer="", text_format="MENU", separator=":")
 
     def print_description(self):
         for my_line in self.__description:
