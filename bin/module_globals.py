@@ -131,8 +131,9 @@ def print_fmt(text, text_format="", indent=0, newline=True):
     if text_format == "TITRE1":
         print("")
         print(repeat(' ', my_indent) + my_color + "╔═" + repeat("═", len(my_text)) + "═╗" + COLORS["RESET"])
-        print(repeat(' ', my_indent) + my_color + "║ " + my_text + " ║" + COLORS["RESET"])
-        print(repeat(' ', my_indent) + my_color + "╚═" + repeat("═", len(my_text)) + "═╝" + COLORS["RESET"])
+        print(repeat(' ', my_indent) + my_color + "║ " + my_text + " ║▒" + COLORS["RESET"])
+        print(repeat(' ', my_indent) + my_color + "╚═" + repeat("═", len(my_text)) + "═╝▒" + COLORS["RESET"])
+        print(repeat(' ', my_indent) + my_color + " ▒" + repeat("▒", len(my_text)) + "▒▒▒" + COLORS["RESET"])
         print("", end="")
     elif text_format == "TITRE2":
         print("")
