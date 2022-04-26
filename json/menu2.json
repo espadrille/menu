@@ -12,7 +12,15 @@
         "text": "Projet",
         "command_line": "pwd | pcregrep -o1 \".*\\/roots\\/([^\\/]*)(\\/?.*)\"",
         "color_ok": "YELLOW",
-        "error_message": "Vous n'etes pas dans un dossier de projet terraform"
+        "error_message": "Vous n'etes pas dans un dossier de projet terraform",
+        "security": {
+          "authorized_groups": [
+            "menu"
+          ]
+        },
+        "conditions": [
+          "pwd | pcregrep -o1 \".*\\/roots\\/([^\\/]*)(\\/?.*)\""
+        ]
       },
       {
         "id": 2,

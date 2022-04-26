@@ -49,6 +49,7 @@ class Menu(object):
 
     # Méthodes privées
     def __update(self):
+        self.__headers.clear()
         self.__items.clear()
         if "menu" in self.__menu:
             if "id" in self.__menu["menu"]:
@@ -59,7 +60,22 @@ class Menu(object):
                 self.__description = self.__menu["menu"]["description"]
             if "headers" in self.__menu["menu"]:
                 for my_header in self.__menu["menu"]["headers"]:
-                    self.add_header(my_header)
+                    authorized = True
+                    if "conditions" in my_header:
+                        for my_condition in my_header["conditions"]:
+                            p = subprocess.run(my_condition, shell=True)
+                            if not p.returncode == 0:
+                                authorized = False
+                    if "security" in my_header:
+                        if "authorized_groups" in my_header["security"]:
+                            for authorized_group in my_header["security"]["authorized_groups"]:
+                                if authorized_group not in [grp.getgrgid(g).gr_name for g in os.getgroups()]:
+                                    authorized = False
+                        if "authorized_users" in my_header["security"]:
+                            if os.getlogin() not in my_header["security"]["authorized_users"]:
+                                authorized = False
+                    if authorized:
+                        self.add_header(my_header)
             if "format" in self.__menu["menu"]:
                 self.__format = self.__menu["menu"]["format"]
             if "items" in self.__menu["menu"]:
@@ -71,14 +87,13 @@ class Menu(object):
                             if not p.returncode == 0:
                                 authorized = False
                     if "security" in my_item:
-                        authorized = False
                         if "authorized_groups" in my_item["security"]:
                             for authorized_group in my_item["security"]["authorized_groups"]:
-                                if authorized_group in [grp.getgrgid(g).gr_name for g in os.getgroups()]:
-                                    authorized = True
+                                if authorized_group not in [grp.getgrgid(g).gr_name for g in os.getgroups()]:
+                                    authorized = False
                         if "authorized_users" in my_item["security"]:
-                            if os.getlogin() in my_item["security"]["authorized_users"]:
-                                authorized = True
+                            if os.getlogin() not in my_item["security"]["authorized_users"]:
+                                authorized = False
                     if authorized:
                         new_item = MenuItem()
                         if "id" in my_item:
