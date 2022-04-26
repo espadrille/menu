@@ -353,11 +353,11 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
         print_fmt(last_separator_line_data, text_format=text_format, indent=indent)
 
 
-def read_fmt(question, default="", format="CYAN", indent=0, newline=False):
+def read_fmt(question, default="", text_format="CYAN", indent=0, newline=False):
     if default != "":
         question = question + " [" + default + "]"
     question = question + " :"
-    print_fmt(text=question, text_format=format, indent=indent, newline=newline)
+    print_fmt(text=question, text_format=text_format, indent=indent, newline=newline)
     response = input()
     if response == "":
         response = default
@@ -388,7 +388,7 @@ def read_choice_fmt(title="", choices=[], question="", text_format="CYAN", inden
             if question == "":
                 question = "Faites un choix parmi (" + options + ") ou 'Entree'  pour sortir : "
 
-            response = read_fmt(question=question, format=text_format, indent=indent)
+            response = read_fmt(question=question, text_format=text_format, indent=indent)
             if response == "" or (response.isnumeric() and int(response) in range(1, i)):
                 choix_ok = True
             else:
