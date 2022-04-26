@@ -140,4 +140,4 @@ Cette commande exécute en mode automatique l'option 3 du menu.
   ==> echo 'Première commande du troisième item'
 Première commande du troisième item
 ```
-Note : Dans ce mode, le menu n'est pas affiché. Seule la commande exécutée et sa ses messages sont affichés. La fonctionnalité "wait_after" est ignorée dans ce mode. Ainsi, toute interaction est supprimée de l'exécution. Ceci permet d'inclure des commandes 'menu' dans des scripts.
+Note : Dans ce mode, le menu n'est pas affiché. Seule la commande exécutée et ses messages sont affichés. La fonctionnalité "wait_after" est ignorée dans ce mode. Ainsi, toute interaction est supprimée de l'exécution. Ceci permet d'inclure des commandes 'menu' dans des scripts.
