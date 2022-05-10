@@ -2,10 +2,12 @@
 import collections
 import grp
 import mimetypes
-import subprocess
+import re
+
 import yaml
 
 from module_globals import *
+from _Command_class import Command
 from _MenuItem_class import MenuItem
 from pathlib import Path
 
@@ -63,8 +65,9 @@ class Menu(object):
                     authorized = True
                     if "conditions" in my_header:
                         for my_condition in my_header["conditions"]:
-                            p = subprocess.run(my_condition, shell=True)
-                            if not p.returncode == 0:
+                            my_command = Command(command_line=my_condition, print_command_line=False)
+                            my_command.execute(capture_output=True)
+                            if not my_command.get_last_return_code() == 0:
                                 authorized = False
                     if "security" in my_header:
                         if "authorized_groups" in my_header["security"]:
@@ -83,8 +86,9 @@ class Menu(object):
                     authorized = True
                     if "conditions" in my_item:
                         for my_condition in my_item["conditions"]:
-                            p = subprocess.run(my_condition, shell=True)
-                            if not p.returncode == 0:
+                            my_command = Command(command_line=my_condition, print_command_line=False)
+                            my_command.execute(capture_output=True)
+                            if not my_command.get_last_return_code() == 0:
                                 authorized = False
                     if "security" in my_item:
                         if "authorized_groups" in my_item["security"]:
@@ -173,13 +177,21 @@ class Menu(object):
             for my_index, my_header in self.__headers.items():
                 try:
                     # Exécution de la commande
-                    p = subprocess.run(my_header["command_line"], shell=True, capture_output=True, text=True)
+                    my_command = Command(command_line=my_header["command_line"], print_command_line=False)
+                    my_command.execute(capture_output=True)
                 except Exception as e:
                     print_fmt(e.__str__(), "ERROR")
-                    print_fmt("Code retour de la commande : " + str(p.returncode), "ERROR")
-                if p.returncode == 0:
+                    print_fmt("Code retour de la commande : " + str(my_command.get_last_return_code()), "ERROR")
+                if my_command.get_last_return_code() == 0:
+                    z = re.match("{(.*)}", my_header["color_ok"])
+                    if z:
+                        my_command_color = Command(command_line=z.groups()[0], print_command_line=False)
+                        my_command_color.execute(capture_output=True)
+                        my_color = my_command_color.get_output()
+                    else:
+                        my_color = my_header["color_ok"]
                     my_datas.append(
-                        [my_header["text"] + "|align=right", (COLORS[my_header["color_ok"]] + p.stdout.strip("\n") + COLORS["RESET"])]
+                        [my_header["text"] + "|align=right", (COLORS[my_color] + my_command.get_output() + COLORS["RESET"])]
                     )
                 else:
                     my_datas.append(
