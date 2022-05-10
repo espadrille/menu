@@ -72,7 +72,7 @@ class Command(object):
                 if capture_output:
                     self.__output = p.stdout.decode("utf-8").strip()
 
-        if (self.__wait_after and len(extra_arguments) == 0) or self.__last_return_code != 0:
+        if (self.__wait_after and len(extra_arguments) == 0) or (self.__last_return_code != 0 and not capture_output):
             print_fmt("Appuyez sur une touche pour continuer...", "CYAN")
             readchar.readchar()
         return self.__last_return_code

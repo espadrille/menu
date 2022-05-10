@@ -287,7 +287,8 @@ if __name__ == "__main__":
     os.chdir("/home/herve/infra_terraform/AWS/roots/FORTIGATE")
     my_menu = Menu()
 #    my_menu.load_file(str(Path.home()) + "/git/menu/.menu/menu_example.json")
-    my_menu.load_file(str(Path.home()) + "/git/menu/json/menu2.json")
+#    my_menu.load_file(str(Path.home()) + "/git/menu/json/menu2.json")
+    my_menu.load_file("/home/herve/.menu/menu.json")
 
     my_menu.sort()
     my_menu.execute()
