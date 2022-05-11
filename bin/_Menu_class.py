@@ -188,14 +188,18 @@ class Menu(object):
                         my_command_color = Command(command_line=z.groups()[0], print_command_line=False)
                         my_command_color.execute(capture_output=True)
                         my_color = my_command_color.get_output()
+                        if my_color not in COLORS:
+                            my_color = "MAUVE"
                     else:
                         my_color = my_header["color_ok"]
                     my_datas.append(
-                        [my_header["text"] + "|align=right", (COLORS[my_color] + my_command.get_output() + COLORS["RESET"])]
+                        [my_header["text"] + "|align=right",
+                         (COLORS[my_color] + my_command.get_output() + COLORS["RESET"])]
                     )
                 else:
                     my_datas.append(
-                        [my_header["text"] + "|align=right", (COLORS["RED"] + my_header["error_message"] + COLORS["RESET"])]
+                        [my_header["text"] + "|align=right",
+                         (COLORS["RED"] + my_header["error_message"] + COLORS["RESET"])]
                     )
             print_tab(datas=my_datas, footer="", text_format="MENU", separator=":")
 
@@ -286,8 +290,8 @@ class Menu(object):
 if __name__ == "__main__":
     os.chdir("/home/herve/infra_terraform/AWS/roots/FORTIGATE")
     my_menu = Menu()
-#    my_menu.load_file(str(Path.home()) + "/git/menu/.menu/menu_example.json")
-#    my_menu.load_file(str(Path.home()) + "/git/menu/json/menu2.json")
+    #    my_menu.load_file(str(Path.home()) + "/git/menu/.menu/menu_example.json")
+    #    my_menu.load_file(str(Path.home()) + "/git/menu/json/menu2.json")
     my_menu.load_file("/home/herve/.menu/menu.json")
 
     my_menu.sort()
