@@ -74,6 +74,7 @@ class Command(object):
 
         if (self.__wait_after and len(extra_arguments) == 0) or (self.__last_return_code != 0 and not capture_output):
             print_fmt("Appuyez sur une touche pour continuer...", "CYAN")
+            flush_input()
             readchar.readkey()
         return self.__last_return_code
 

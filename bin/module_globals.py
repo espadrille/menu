@@ -77,7 +77,15 @@ def clear_screen():
         # It is for Windows platform
         _ = os.system('cls')
 
-
+def flush_input():
+    try:
+        import msvcrt
+        while msvcrt.kbhit():
+            msvcrt.getch()
+    except ImportError:
+        import sys, termios
+        termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+        
 def repeat(text, nb=2):
     #
     # Repeter un caractere (ou plusieurs...), sans retour a la ligne
