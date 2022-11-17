@@ -99,7 +99,6 @@ def repeat(text, nb=2):
         retour = retour + text
     return retour
 
-
 def print_fmt(text, text_format="", indent=0, newline=True):
     #
     # Propose un affichage formate.
@@ -224,7 +223,7 @@ def print_tab(title="", headers=[], datas=[], footer=None, text_format="", inden
     for MyLength in field_lengths_printable:
         if line_length != 0:
             line_length = line_length + len(column_separator)
-            separator_line = separator_line + re.sub("\s", "-", re.sub("\S", "+", column_separator))
+            separator_line = separator_line + re.sub(r"\s", "-", re.sub(r"\S", "+", column_separator))
         line_length = line_length + MyLength
         separator_line = separator_line + repeat("-", MyLength)
     # Agrandir la longueur de ligne et la ligne de separation si nécessaire pour que le titre passe dedans
