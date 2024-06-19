@@ -133,7 +133,12 @@ class Menu(object):
                 my_item.set_key(str(my_key))
             my_item.set_key_length(self.__key_length_max)
 
-    def load_file(self, menu_file):
+    def load_file(self, menu_file: str):
+        """Charge un fichier de menu
+
+        Args:
+            menu_file (str): Chemin du fichier de menu à charger
+        """
         self.__menu_file = menu_file
         try:
             self.__menu_file_mime_type = mimetypes.guess_type(self.__menu_file)[0]
@@ -150,7 +155,12 @@ class Menu(object):
             print_fmt("Impossible de charger le fichier de menu [" + self.__menu_file + "]", "ERROR")
             print_fmt(e.__str__(), "ERROR")
 
-    def load_json(self, json_string):
+    def load_json(self, json_string: str):
+        """Charge une chaine de caracteres au format json dans la propriété self.__menu
+
+        Args:
+            json_string (str): Chaine de caractères au format json
+        """
         try:
             self.__menu_loaded = False
             self.__menu = json.loads(json_string)
@@ -160,6 +170,11 @@ class Menu(object):
             print_fmt(e.__str__(), "ERROR")
 
     def load_yaml(self, yaml_fp):
+        """Charge une chaine de caracteres au format yaml dans la propriété self.__menu
+
+        Args:
+            yaml_fp (str): Chaine de caractères au format yaml
+        """
         try:
             self.__menu_loaded = False
             self.__menu = yaml.safe_load(yaml_fp)
@@ -169,9 +184,13 @@ class Menu(object):
             print_fmt(e.__str__(), "ERROR")
 
     def print_title(self):
+        """Affiche le titre du menu
+        """
         print_fmt(self.__title, self.__format)
 
     def print_headers(self):
+        """Affiche le bloc d'entêtes du menu.
+        """
         if len(self.__headers.items()) > 0:
             my_datas = []
             for my_index, my_header in self.__headers.items():
@@ -224,7 +243,8 @@ class Menu(object):
                 my_item.print()
 
     def read_choice(self):
-        # Transformer les clés en format chaîne avant rechercher la réponse utilisateur dans la liste
+        """Transformer les clés en format chaîne avant rechercher la réponse utilisateur dans la liste
+        """
         str_keys = [str(key) for key in self.__items.keys()]
         if self.__sorted:
             str_keys.sort()
@@ -234,6 +254,8 @@ class Menu(object):
             self.__last_choice = read_fmt("Votre choix parmi [" + ", ".join(str_keys) + "]")
 
     def print_menu(self):
+        """Affiche le menu
+        """
         clear_screen()
         self.print_title()
         self.print_description()
@@ -242,9 +264,13 @@ class Menu(object):
         print_fmt("")
 
     def execute(self, extra_arguments: object = []) -> object:
-        """
+        """Execute le menu
 
-        :rtype: object
+        Args:
+            extra_arguments (object, optional): Liste d'arguments supplémentaires pour l'exécution du menu. Defaults to [].
+
+        Returns:
+            object: Le code retour de la dernière commande exécutée
         """
         if self.__menu_loaded:
             exit_menu = False
