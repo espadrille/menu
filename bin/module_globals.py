@@ -99,7 +99,7 @@ def repeat(text, nb=2):
         retour = retour + text
     return retour
 
-def print_fmt(text, text_format="", indent=0, newline=True):
+def print_fmt(text: object, text_format: object = "", indent: object = 0, newline: object = True) -> object:
     #
     # Propose un affichage formate.
     #

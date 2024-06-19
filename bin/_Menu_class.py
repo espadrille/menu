@@ -18,7 +18,7 @@ mimetypes.add_type("application/x-yaml", ".yml")
 # Definition de la classe Menu
 
 class Menu(object):
-    def __init__(self, menu_file="", sort_items=False):
+    def __init__(self, menu_file: str="", sort_items: bool=False):
         self.__id = ""  # Identifiant du menu
         self.__title = ""  # Titre du menu
         self.__description = ""  # Description du menu
@@ -241,7 +241,11 @@ class Menu(object):
         self.print_items()
         print_fmt("")
 
-    def execute(self, extra_arguments=[]):
+    def execute(self, extra_arguments: object = []) -> object:
+        """
+
+        :rtype: object
+        """
         if self.__menu_loaded:
             exit_menu = False
             while not exit_menu:
