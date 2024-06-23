@@ -51,6 +51,8 @@ class Menu(object):
 
     # Méthodes privées
     def __update(self):
+        """Reconstruit le menu a partir du contenu de la propriete self.__menu
+        """
         self.__headers.clear()
         self.__items.clear()
         if "menu" in self.__menu:
@@ -114,10 +116,20 @@ class Menu(object):
                         self.add_item(new_item)
 
     # Méthodes publiques
-    def add_header(self, header):
+    def add_header(self, header:dict):
+        """Ajoute un entete au menu
+
+        Args:
+            header (dict): Entete a ajouter au menu
+        """
         self.__headers[header['id']] = header
 
-    def add_item(self, item):
+    def add_item(self, item:MenuItem):
+        """Ajoute un item au menu
+
+        Args:
+            item (MenuItem): Item a ajouter au menu
+        """
         self.__items[item.get_key()] = item
         self.__s_items[str(item.get_key())] = item
         if item.get_key_length() > self.__key_length_max:
@@ -223,12 +235,16 @@ class Menu(object):
             print_tab(datas=my_datas, footer="", text_format="MENU", separator=":")
 
     def print_description(self):
+        """Affiche la description du menu.
+        """
         if len(self.__description) > 0:
             for my_line in self.__description:
                 print_fmt(my_line, "MENU", 2)
             print_fmt("")
 
     def print_items(self):
+        """Affiche les items du menu.
+        """
         if self.__sorted:
             if self.__int_sortable:
                 for my_key, my_item in collections.OrderedDict(
