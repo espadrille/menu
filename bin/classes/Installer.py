@@ -18,21 +18,29 @@ class Installer(object):
       '''
       try:
           importlib.import_module(module_name)
+          return True
       except ImportError:
           print(f"Module manquant '{module_name}'. Tentative d'installation...")
           
           # Tentative d'installation du paquet manquant
-          if not self.install_with_pip(module_name):
-              self.install_with_os_installer(module_name)
+          success = self.install_with_pip(module_name)
+          if success is False:
+              success = self.install_with_os_installer(module_name)
 
-          try:
-              # Re-import du module apres installation
-              importlib.invalidate_caches()
-              importlib.import_module(module_name)
-              print(f"Module installe : '{module_name}'.")
-          except subprocess.CalledProcessError:
-              print(f"Error: Le module '{module_name}' n'a pas pu être importé.")
-              sys.exit(1)
+          if success: 
+            try:
+                # Re-import du module apres installation
+                importlib.invalidate_caches()
+                importlib.import_module(module_name)
+                print(f"Module installe : '{module_name}'.")
+                return True
+            except ImportError:
+                print(f"Error: Le module '{module_name}' n'a pas pu etre importe.")
+                return False
+          else:
+              print(f"Error: Impossible d'installer le module '{module_name}'.")
+              return False
+
 
     def install_with_pip(self, package_name: str):
         '''
@@ -64,12 +72,14 @@ class Installer(object):
             return False
         
         distro_id = os_info.get("ID", "").lower()
-        distro_like = os_info.get("ID_LIKE", "").lower()
+        distro_like = os_info.get("ID_LIKE", "").lower().split()
+
+        install_cmd = None
         if distro_id == "ubuntu" or "debian" in distro_like or "debian" == distro_id:
             install_cmd = ["sudo", "apt-get", "install", "-y", f"python3-{package_name}"]
         
         elif distro_id == "fedora" or "rhel" in distro_like or "centos" in distro_like:
-            install_cmd = ["sudo", "dnf", "install", "-y", f"python-{package_name}"]
+            install_cmd = ["sudo", "dnf", "install", "-y", f"python3-{package_name}"]
         
         elif distro_id == "arch" or "arch" in distro_like:
             install_cmd = ["sudo", "pacman", "-Syu", "--noconfirm", f"python-{package_name}"]
@@ -77,11 +87,15 @@ class Installer(object):
         elif "suse" in distro_id or "suse" in distro_like:
             install_cmd = ["sudo", "zypper", "install", "-y", f"python-{package_name}"]  
 
-        try:
-            subprocess.check_call(install_cmd)
-            print(f"Package installe : '{package_name}'.")
-            return True
-        except subprocess.CalledProcessError:
-            print(f"Error: Impossible d'installer le package '{package_name}' avec l'installeur du systeme.")
-            print(f"       La commande \"{' '.join(install_cmd)}\" a echoue.")
+        if install_cmd is None:
+            print(f"Error: Distribution '{distro_id}' non supportee pour l'installation automatique.")
             return False
+        else:
+          try:
+              subprocess.check_call(install_cmd)
+              print(f"Package installe : '{package_name}'.")
+              return True
+          except subprocess.CalledProcessError:
+              print(f"Error: Impossible d'installer le package '{package_name}' avec l'installeur du systeme.")
+              print(f"       La commande \"{' '.join(install_cmd)}\" a echoue.")
+              return False
