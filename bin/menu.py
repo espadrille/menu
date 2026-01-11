@@ -3,9 +3,14 @@
 # Import des modules
 from ast import arg
 from optparse import OptionParser
-from module_globals import *
 
-from _Menu_class import Menu
+
+# Installation des modules requis
+from classes.Installer import Installer
+installer = Installer(["readchar"])
+
+from classes.GlobalVars import *
+from classes.Menu import Menu
 
 # Lecture des arguments d'appel
 parser = OptionParser()

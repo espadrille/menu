@@ -2,8 +2,8 @@
 import collections
 import readchar
 
-from module_globals import *
-from _Command_class import Command
+from .GlobalVars import *
+from .Command import Command
 
 
 # Definition de la classe MenuItem

@@ -2,7 +2,7 @@
 import readchar
 import subprocess
 
-from module_globals import *
+from .GlobalVars import *
 
 
 # Definition de la classe Command

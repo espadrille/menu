@@ -3,13 +3,13 @@ import collections
 import grp
 import mimetypes
 import re
-
 import yaml
 
-from module_globals import *
-from _Command_class import Command
-from _MenuItem_class import MenuItem
 from pathlib import Path
+
+from .GlobalVars import *
+from .Command import Command
+from .MenuItem import MenuItem
 
 mimetypes.add_type("application/x-yaml", ".yaml")
 mimetypes.add_type("application/x-yaml", ".yml")
